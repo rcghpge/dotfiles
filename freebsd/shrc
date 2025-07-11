@@ -1,0 +1,4 @@
+set +o emacs
+export PATH="$HOME/bin:$PATH"
+alias ll='ls -lF'
+alias la='ls -A'

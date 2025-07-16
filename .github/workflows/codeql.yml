@@ -41,8 +41,9 @@ jobs:
 
     strategy:
       fail-fast: false
-      #matrix:
-        #include:
+      matrix:
+        include:
+           - language: bash
           #- language: 'c'
           #- language: 'cpp'
           #- language: 'rust'

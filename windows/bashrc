@@ -2,5 +2,7 @@
 [ -f ~/.exports ] && source ~/.exports
 [ -f ~/.functions ] && source ~/.functions
 export PS1="\[\e[1;32m\]\u@\h\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\] \$ "
-
 export PATH="/home/rc/.pixi/bin:$PATH"
+
+BROWSER="/mnt/c/Program\\ Files/Google/Chrome/Application/chrome.exe"
+alias google-chrome="/mnt/c/Program\\ Files/Google/Chrome/Application/chrome.exe"

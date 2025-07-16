@@ -12,6 +12,7 @@ This repository contains unified dotfiles for:
 - `windows/`: Windows-specific dotfiles.
 - `freebsd/`: FreeBSD-specific dotfiles.
 - `linux/`: Linux-specific dotfiles.
+- `scripts/`: Setup and installation scripts.
 
 ## Install
 

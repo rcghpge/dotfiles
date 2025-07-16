@@ -13,6 +13,7 @@ sudo apt install -y \
   curl \
   neovim \
   build-essential \
+  python3 \
   python3-pip \
   wslu \
   xdg-utils \

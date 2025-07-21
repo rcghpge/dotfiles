@@ -1,5 +1,6 @@
 # Cross-Platform Dotfiles
 [![Shell Lint](https://github.com/rcghpge/dotfiles/actions/workflows/lint.yml/badge.svg)](https://github.com/rcghpge/dotfiles/actions/workflows/lint.yml)
+
 This repository contains unified dotfiles for:
 
 - Windows 10/11 (Bash: Git Bash, WSL)

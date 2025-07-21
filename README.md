@@ -25,3 +25,5 @@ bash install.sh
 ## License
 
 MIT
+
+---

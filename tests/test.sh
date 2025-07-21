@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Shell script tests
 
 # test pass on shellcheck

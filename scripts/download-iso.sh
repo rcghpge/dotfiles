@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# download-iso.sh — Fetch latest ISOs for Linux distributions
+# download-iso.sh — Fetch latest ISOs for Linux distributions.
 # Validate script logic before running. Refine for modular cross-platform builds - TODO.
 
 set -euo pipefail

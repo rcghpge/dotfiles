@@ -92,14 +92,11 @@ fi
 echo "✅ JupyterLab setup complete. Launch with: jupyter lab"
 
 # Example usage:
-```bash
-./install_jupyter.sh
+#   ./install_jupyter.sh
+#
+# Or:
+#   ./install_jupyter.sh --no-browser
+#
+# Or:
+#   ./install_jupyter.sh --with-browser
 
-# Or
-
-./install_jupyter.sh --no-browser
-
-# Or
-
-./install_jupyter.sh --with-browser
-```

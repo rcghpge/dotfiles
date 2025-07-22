@@ -19,7 +19,7 @@ if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
 fi
 
 # Perform substitutions with .bak backups
-for file in $(find "$ROOT_DIR" -type f -name "*.sh"); do
+find "$ROOT_DIR" -type f -name "*.sh" | while read -r file; do
   sed -i"$BACKUP_EXT" \
     -e 's/\<apt-get update\>/apt-get update/g' \
     -e 's/\<apt-get upgrade\>/apt-get upgrade/g' \

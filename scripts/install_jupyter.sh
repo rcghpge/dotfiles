@@ -34,6 +34,7 @@ else
 fi
 
 # Activate virtual environment
+# shellcheck source=/dev/null
 source "$VENV_DIR/bin/activate"
 
 # Upgrade pip
@@ -57,7 +58,7 @@ ln -sf "$VENV_DIR/bin/jupyter" "$LOCAL_BIN/jupyter"
 
 # Ensure ~/.local/bin is in PATH
 if ! echo "$PATH" | grep -q "$LOCAL_BIN"; then
-  echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
+  echo "export PATH=\"\$HOME/.local/bin:\$PATH\"" >> "$HOME/.bashrc"
   echo "🛠️  Added ~/.local/bin to PATH in ~/.bashrc"
 fi
 

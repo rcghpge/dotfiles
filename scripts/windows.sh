@@ -16,7 +16,8 @@ sudo apt-get install -y \
   python3-venv \
   wslu \
   xdg-utils \
-  shellcheck
+  shellcheck \
+  speedtest-cli
 
 echo "✅ Base setup complete."
 

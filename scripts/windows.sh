@@ -9,6 +9,7 @@ echo "📦 Installing WSL and development essentials..."
 sudo apt-get install -y \
   git \
   curl \
+  emacs \
   neovim \
   build-essential \
   python3 \

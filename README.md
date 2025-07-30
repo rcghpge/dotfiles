@@ -1,4 +1,5 @@
 # Cross-Platform Dotfiles
+[![PowerShell](https://github.com/rcghpge/dotfiles/actions/workflows/powershell.yml/badge.svg)](https://github.com/rcghpge/dotfiles/actions/workflows/powershell.yml)
 [![Shell Lint](https://github.com/rcghpge/dotfiles/actions/workflows/lint.yml/badge.svg)](https://github.com/rcghpge/dotfiles/actions/workflows/lint.yml)
 
 This repository contains unified dotfiles for:

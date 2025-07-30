@@ -35,6 +35,7 @@ bash bash_env_clean.sh
 ```
 
 This will:
+
 Show top disk usage in your home directory and delete common cache directories if they exist:
 - `~/.cache/huggingface`
 - `~/.cache/rattler`

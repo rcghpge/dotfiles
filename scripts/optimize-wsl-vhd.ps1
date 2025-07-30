@@ -1,7 +1,7 @@
 # optimize-wsl-vhd.ps1
 <#
 .SYNOPSIS
-  Optimize WSL2 VHDX files and optionally back them up.
+  Optimize WSL2 VHDX Linux files/filesystems and optionally back them up.
 
 .DESCRIPTION
   This script finds all ext4.vhdx files related to WSL2 Linux distros and

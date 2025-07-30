@@ -1,4 +1,4 @@
-# Cross-Platform Dotfiles
+# dotfiles
 [![PowerShell](https://github.com/rcghpge/dotfiles/actions/workflows/powershell.yml/badge.svg)](https://github.com/rcghpge/dotfiles/actions/workflows/powershell.yml)
 [![Shell Lint](https://github.com/rcghpge/dotfiles/actions/workflows/lint.yml/badge.svg)](https://github.com/rcghpge/dotfiles/actions/workflows/lint.yml)
 
@@ -23,6 +23,37 @@ git clone https://github.com/yourusername/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 bash install.sh
 ```
+##  Cean Up with `bash_env_clean.sh`
+
+After installation, you can run the environment cleanup script to free up space from common development caches:
+```bash
+# Be sure to set permissions if need (chmod +x)
+bash bash_env_clean.sh
+
+# With permissions set
+./bash_env_clean.sh
+```
+
+This will:
+- Show top disk usage in your home directory
+- Delete common cache directories if they exist:
+
+- `~/.cache/huggingface`
+- `~/.cache/rattler`
+- `~/.cache/kagglehub`
+- `~/.cache/pip`
+
+Output looks like:
+```bash
+🔍 Initial disk usage in /home/yourname
+2.1G    /home/yourname/.cache
+...
+
+🧹 Deletig Hugging Face cache...
+🧹 Dleting Rattler (Pixi) cache...
+🧹 Deleting pip cache...
+```
+No root access needed. Run it anytime to keep your environment lean and clean.
 
 ## License
 

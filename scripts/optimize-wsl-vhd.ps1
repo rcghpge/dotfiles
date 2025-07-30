@@ -19,14 +19,10 @@
   PS> ./optimize-wsl-vhd.ps1 -noBackup
   Prompts for a WSL disk and shrinks it without creating a backup.
 
-.AUTHOR
-  rcghpge (https://github.com/rcghpge)
-
-.LICENSE
-  MIT License — https://opensource.org/licenses/MIT
-
 .NOTES
   Created: 2025-07-30
+  Author: rcghpge (https://github.com/rcghpge)
+  License: MIT — https://opensource.org/licenses/MIT
   Version: 0.1.0
   Repository: https://github.com/rcghpge/dotfiles
 #>

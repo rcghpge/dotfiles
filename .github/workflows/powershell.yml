@@ -49,6 +49,7 @@ jobs:
           config-path: .github/gitleaks.toml  # Optional custom configs
 
       - name: Reminder: Sign PowerShell Scripts
+        shell: pwsh
         run: |
           echo "🔐 Reminder: Consider signing production scripts with a code-signing certificate."
           echo "Use Set-AuthenticodeSignature for release builds."

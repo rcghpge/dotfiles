@@ -1,4 +1,4 @@
-name: PowerShell CI
+name: PowerShell
 
 on:
   push:

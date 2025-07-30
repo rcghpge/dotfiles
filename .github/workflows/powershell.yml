@@ -51,8 +51,19 @@ jobs:
             Write-Output "[INFO] No Pester tests found. Skipping."
           }
 
-      - name: Secret Scan with Gitleaks
-        uses: gitleaks/gitleaks-action@v2
-        with:
-          version: "8.24.2"
+      - name: Run Gitleaks checks
+        shell: pwsh
+        run: |
+          $version = "8.24.2"
+          $url = "https://github.com/zricethezav/gitleaks/releases/download/v$version/gitleaks_${version}_windows_x64.zip"
+          $zipPath = "$env:RUNNER_TEMP\gitleaks.zip"
+          $gitleaksDir = "$env:RUNNER_TEMP\gitleaks"
+
+          Invoke-WebRequest -Uri $url -OutFile $zipPath
+          Expand-Archive -Path $zipPath -DestinationPath $gitleaksDir
+          $gitleaksExe = Join-Path $gitleaksDir "gitleaks.exe"
+
+          Get-ChildItem -Recurse -Include *.ps1,*.psm1 | ForEach-Object {
+          & $gitleaksExe detect --no-git --source $_.FullName
+          }
 

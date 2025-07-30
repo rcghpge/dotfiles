@@ -1,10 +1,35 @@
 # optimize-wsl-vhd.ps1
+<#
+.SYNOPSIS
+  Optimize WSL2 VHDX files and optionally back them up.
 
-# Cleans WSL ext4 VHD's for bloat on Windows
-# Run this PowerShell script as Administrator
-# By default it creates a backup ext4.vhx filesystem
-# Run .\optimize-wsl-vhd.ps1 -nb or -noBackup flag 
-# to skip generating a backup.
+.DESCRIPTION
+  This script finds all ext4.vhdx files related to WSL2 Linux distros and
+  compacts them using Optimize-VHD to reclaim disk space. By default, it
+  creates a backup of the VHDX before shrinking it unless the -noBackup
+  (or -nb) flag is passed.
+
+.PARAMETER noBackup
+  Skip creation of the ext4-backup.vhdx file before optimization.
+
+.EXAMPLE
+  PS> ./optimize-wsl-vhd.ps1
+  Prompts for a WSL disk and creates a backup before shrinking it.
+
+  PS> ./optimize-wsl-vhd.ps1 -noBackup
+  Prompts for a WSL disk and shrinks it without creating a backup.
+
+.AUTHOR
+  rcghpge (https://github.com/rcghpge)
+
+.LICENSE
+  MIT License — https://opensource.org/licenses/MIT
+
+.NOTES
+  Created: 2025-07-30
+  Version: 0.1.0
+  Repository: https://github.com/rcghpge/dotfiles
+#>
 
 param (
     [Alias("nb")]

@@ -1,4 +1,6 @@
 #!/bin/bash
+# This bash script cleans cached memory on your machine (Hugging Face, 
+# Pixi, pip, KaggleHub) and orphaned Python/Jupyter files from $HOME.
 
 echo "🔍 Initial disk usage in /home/$USER"
 du -h --max-depth=1 ~ | sort -hr | head -n 15

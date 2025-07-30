@@ -25,7 +25,7 @@ bash install.sh
 ```
 ##  Clean up with `bash_env_clean.sh`
 
-After installation, you can run the environment cleanup script to free up disk space from common development caches:
+After installation, you can run the environment cleanup script to free up disk space from common development caches in cached memory:
 ```bash
 # Be sure to set permissions if need (chmod +x)
 bash bash_env_clean.sh

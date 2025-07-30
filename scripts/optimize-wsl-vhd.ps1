@@ -31,6 +31,7 @@
   Repository: https://github.com/rcghpge/dotfiles
 #>
 
+[CmdletBinding()]
 param (
     [Alias("nb")]
     [switch]$noBackup
@@ -39,7 +40,7 @@ param (
 $logFile = "optimize-wsl-vhd.log"
 Start-Transcript -Path $logFile -Append
 
-Write-Host "`n?? Scanning known locations for ext4.vhdx files..." -ForegroundColor Cyan
+Write-Output "`n[INFO] Scanning known locations for ext4.vhdx files..."
 
 $searchPaths = @(
   "$env:LOCALAPPDATA\wsl",
@@ -65,19 +66,19 @@ foreach ($path in $searchPaths) {
 }
 
 if (-not $vhds -or $vhds.Count -eq 0) {
-    Write-Host "? No ext4.vhdx files found in known WSL paths." -ForegroundColor Red
+    Write-Error "[ERROR] No ext4.vhdx files found in known WSL paths."
     Stop-Transcript
     exit 1
 }
 
-Write-Host "`n?? Found ext4.vhdx files:" -ForegroundColor Yellow
-$vhds | ForEach-Object { Write-Host "[$($_.Index)] $($_.FullName) - $($_.SizeGB) GB" }
+Write-Output "`n[INFO] Found ext4.vhdx files:"
+$vhds | ForEach-Object { Write-Output "[$($_.Index)] $($_.FullName) - $($_.SizeGB) GB" }
 
 $choice = Read-Host "`nEnter the number of the VHD you want to optimize"
 $selected = $vhds | Where-Object { $_.Index -eq [int]$choice }
 
 if (-not $selected) {
-    Write-Host "? Invalid selection. Exiting." -ForegroundColor Red
+    Write-Error "[ERROR] Invalid selection. Exiting."
     Stop-Transcript
     exit 1
 }
@@ -86,39 +87,36 @@ $fullPath = $selected.FullName
 $folder = Split-Path $fullPath
 $backupPath = Join-Path $folder "ext4-backup.vhdx"
 
-Write-Host "`n?? Selected VHD:" -ForegroundColor Cyan
-Write-Host $fullPath
-Write-Host "?? Size before: $($selected.SizeGB) GB"
+Write-Output "`n[INFO] Selected VHD:"
+Write-Output "$fullPath"
+Write-Output "[INFO] Size before: $($selected.SizeGB) GB"
 
-# Shutdown WSL
-Write-Host "`n? Shutting down WSL..."
+Write-Output "`n[INFO] Shutting down WSL..."
 wsl --shutdown
 Start-Sleep -Seconds 2
 
-# Optional Backup
 if (-not $noBackup.IsPresent) {
-    Write-Host "`n?? Creating backup: $backupPath"
+    Write-Output "`n[INFO] Creating backup: $backupPath"
     Copy-Item -Path $fullPath -Destination $backupPath -Force
 } else {
-    Write-Host "`n?? Skipping backup (you used -noBackup or -nb)" -ForegroundColor DarkYellow
+    Write-Warning "[WARN] Skipping backup (you used -noBackup or -nb)"
 }
 
-# Optimize
-Write-Host "`n?? Optimizing with Optimize-VHD..."
+Write-Output "`n[INFO] Optimizing with Optimize-VHD..."
 Optimize-VHD -Path $fullPath -Mode Full
 
-# Size after
 $sizeAfter = (Get-Item $fullPath).Length / 1GB
 $delta = [math]::Round($selected.SizeGB - $sizeAfter, 2)
 
-Write-Host "`n? Done!" -ForegroundColor Green
-Write-Host "?? Size after optimization: $([math]::Round($sizeAfter,2)) GB"
-Write-Host "?? Space saved: $delta GB" -ForegroundColor Green
+Write-Output "`n[INFO] Done!"
+Write-Output "[INFO] Size after optimization: $([math]::Round($sizeAfter,2)) GB"
+Write-Output "[INFO] Space saved: $delta GB"
 
-Write-Host "`n?? Log saved to: $logFile"
+Write-Output "`n[INFO] Log saved to: $logFile"
 if (-not $noBackup.IsPresent) {
-    Write-Host "?? Backup saved to: $backupPath"
+    Write-Output "[INFO] Backup saved to: $backupPath"
 }
-Write-Host "`n?? You can now restart WSL using 'wsl'" -ForegroundColor Cyan
+Write-Output "`n[INFO] You can now restart WSL using 'wsl'"
 
 Stop-Transcript
+

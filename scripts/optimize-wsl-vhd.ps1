@@ -4,9 +4,9 @@
   Optimize WSL2 VHDX Linux files/filesystems and optionally back them up.
 
 .DESCRIPTION
-  This script finds all ext4.vhdx files related to WSL2 Linux distros and
+  This script finds all ext4.vhdx files related to WSL2 Linux distributions and
   compacts them using Optimize-VHD to reclaim disk space. By default, it
-  creates a backup of the VHDX before shrinking it unless the -noBackup
+  creates a backup of the VHDX before shrinking it unless a -noBackup
   (or -nb) flag is passed.
 
 .PARAMETER noBackup

@@ -42,13 +42,13 @@ jobs:
             exit 1
           }
 
-      - name: Run Pester Tests (if available)
+      - name: Run Pester Tests (if available) # TODO: add tests to harden pwsh stack
         shell: pwsh
         run: |
-          if (Test-Path './tests') {
+          if (Test-Path './tests' -and (Get-ChildItem -Path ./tests -Filter *.Tests.ps1 -Recurse)) {
             Invoke-Pester -Path ./tests -CI
           } else {
-            Write-Host "No tests found. Skipping Pester."
+            Write-Output "[INFO] No Pester tests found. Skipping."
           }
 
       - name: Secret Scan with Gitleaks

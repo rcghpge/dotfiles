@@ -53,4 +53,6 @@ jobs:
 
       - name: Secret Scan with Gitleaks
         uses: gitleaks/gitleaks-action@v2
+        with:
+          version: "8.24.2"
 

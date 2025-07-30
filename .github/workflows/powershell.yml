@@ -1,0 +1,55 @@
+name: PowerShell
+
+on:
+  push:
+    paths:
+      - '**/*.ps1'
+      - '**/*.psm1'
+  pull_request:
+    paths:
+      - '**/*.ps1'
+      - '**/*.psm1'
+
+jobs:
+  analyze:
+    name: Lint, Test, and Scan PowerShell
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install PowerShell modules
+        shell: pwsh
+        run: |
+          Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser
+          Install-Module -Name Pester -Force -Scope CurrentUser
+
+      - name: Run PSScriptAnalyzer (fail on any issue)
+        shell: pwsh
+        run: |
+          $results = Invoke-ScriptAnalyzer -Path ./ -Recurse -Severity Warning,Error -OutVariable issues
+          $issues | ForEach-Object { Write-Host "$($_.RuleName): $($_.Message)" }
+          if ($issues.Count -gt 0) {
+            Write-Error "PSScriptAnalyzer found issues"
+            exit 1
+          }
+
+      - name: Run Pester tests (optional)
+        shell: pwsh
+        run: |
+          if (Test-Path './tests') {
+            Invoke-Pester -Path ./tests -CI
+          } else {
+            Write-Host "No tests found. Skipping Pester."
+          }
+
+      - name: Scan for secrets with Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          config-path: .github/gitleaks.toml  # Optional custom configs
+
+      - name: Reminder: Sign PowerShell Scripts
+        run: |
+          echo "🔐 Reminder: Consider signing production scripts with a code-signing certificate."
+          echo "Use Set-AuthenticodeSignature for release builds."
+

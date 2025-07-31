@@ -22,6 +22,35 @@ for arg in "$@"; do
   esac
 done
 
+# Detect OS and environment for browser compatibility
+OS_ID=$(grep -oP '(?<=^ID=).*' /etc/os-release 2>/dev/null || echo "unknown")
+IS_WSL=false
+IS_HEADLESS=false
+
+# Detect WSL
+if grep -qi microsoft /proc/version 2>/dev/null; then
+  IS_WSL=true
+fi
+
+# Detect headless (no display)
+if [ -z "${DISPLAY:-}" ] && [ -z "${WAYLAND_DISPLAY:-}" ]; then
+  IS_HEADLESS=true
+fi
+
+# Warn if browser auto-launch may fail
+if [ "${browser_setting:-false}" = true ]; then
+  echo "🔍 Verifying system compatibility for browser auto-launch..."
+  if $IS_WSL; then
+    echo "⚠️  Running in WSL — requires 'wslu' and 'wslview' for browser launch."
+  elif [ "$OS_ID" = "arch" ] && $IS_HEADLESS; then
+    echo "⚠️  Arch Linux without graphical session detected — browser may not auto-launch."
+  elif $IS_HEADLESS; then
+    echo "⚠️  No DISPLAY environment variable — headless session may block auto-launch."
+  else
+    echo "✅ Browser auto-launch appears to be supported."
+  fi
+fi
+
 # Define virtual environment location
 VENV_DIR="$HOME/venvs/jupyter"
 
@@ -100,4 +129,3 @@ echo "✅ JupyterLab setup complete. Launch with: jupyter lab"
 #
 # Or:
 #   ./install_jupyter.sh --with-browser
-

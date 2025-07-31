@@ -147,9 +147,6 @@ else
   echo "🔗 JupyterLab is ready. Visit: http://127.0.0.1:8888"
 fi
 
-# Confirm completion
-echo "✅ JupyterLab setup complete. Launch with: jupyter lab"
-
 # Example usage:
 #   ./install_jupyter.sh
 #

@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# If Jupyter Lab does not auto-launch to browser check if xdg-utils is installed
+# via the sudo pacman -S xdg-utils command
+
 set -e
 
 # Parse CLI flags

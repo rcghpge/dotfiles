@@ -118,6 +118,35 @@ else
   echo "✅ Auto-launch enabled in $CONFIG_FILE"
 fi
 
+# Confirm Jupyter installation completion
+echo "✅ JupyterLab setup complete. Launch with: jupyter lab"
+
+# Attempt to auto-launch server and browser if enabled
+if [ "${browser_setting:-false}" = true ]; then
+  echo "🚀 Starting JupyterLab server..."
+
+  # Launch server in background
+  jupyter lab --no-browser --ip=127.0.0.1 --port=8888 &
+
+  # Give it time to initialize
+  sleep 3
+
+  # Try to extract running URL with token
+  LAB_URL=$(jupyter lab list 2>/dev/null | grep -o 'http://127.0.0.1:8888/.*' | head -n 1)
+  LAB_URL="${LAB_URL:-http://127.0.0.1:8888}"
+
+  echo "🌐 Attempting to open browser..."
+  if command -v xdg-open &>/dev/null; then
+    xdg-open "$LAB_URL"
+  elif command -v wslview &>/dev/null; then
+    wslview "$LAB_URL"
+  else
+    echo "🔗 Unable to open automatically. Please open manually: $LAB_URL"
+  fi
+else
+  echo "🔗 JupyterLab is ready. Visit: http://127.0.0.1:8888"
+fi
+
 # Confirm completion
 echo "✅ JupyterLab setup complete. Launch with: jupyter lab"
 

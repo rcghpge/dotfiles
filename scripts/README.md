@@ -23,3 +23,32 @@ bash windows.sh
 Supports both Ubuntu/Debian and Arch Linux (including ArchWSL).
 Automatically detects distro and architecture (x86_64, aarch64) and installs system-specific dev tools.
 
+✅ install_jupyter.sh
+Installs JupyterLab inside a virtual environment (~/venvs/jupyter) with optional browser auto-launch support.
+
+📦 Usage:
+```bash
+# Standard install (will prompt for browser preference)
+./install_jupyter.sh
+
+# Force install with browser auto-launch
+./install_jupyter.sh --with-browser
+
+# Force install without browser auto-launch
+./install_jupyter.sh --no-browser
+```
+
+💡 Notes:
+On Arch Linux, make sure xdg-utils is installed for browser auto-launch.
+
+On WSL, the script will use wslview if available.
+
+Adds Jupyter to ~/.local/bin for convenience.
+
+You can launch JupyterLab anytime with:
+```bash
+jupyter lab
+```
+
+---
+

@@ -15,6 +15,7 @@ if [[ "$DISTRO_ID" == "ubuntu" || "$DISTRO_ID" == "debian" ]]; then
   echo "📦 Installing base packages for Debian/Ubuntu..."
   sudo apt-get install -y \
     git \
+    tree \
     curl \
     emacs \
     neovim \
@@ -34,6 +35,7 @@ elif [[ "$DISTRO_ID" == "arch" ]]; then
   echo "📦 Installing base packages for Arch Linux..."
   sudo pacman -S --noconfirm --needed \
     git \
+    tree \
     curl \
     emacs \
     neovim \

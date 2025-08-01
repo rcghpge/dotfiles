@@ -15,15 +15,16 @@ Set-ExecutionPolicy RemoteSigned -Scope Process
 
 ---
 
-## Bash (Linux / WSL) `windows.sh` 
+## Bash (Linux / WSL) on Windows `windows.sh` 
 
-Cross-platform bootstrap script for dev environments:
+Bootstrap script for dev environments:
 ```bash
 bash windows.sh
 ```
 
 Supports both Ubuntu/Debian and Arch Linux (including ArchWSL).
 Automatically detects distro and architecture (x86_64, aarch64) and installs system-specific dev tools.
+Should work on native-Ubuntu/Debian and Arch Linux
 
 ---
 

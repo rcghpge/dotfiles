@@ -13,6 +13,8 @@ Set-ExecutionPolicy RemoteSigned -Scope Process
 .\optimize-wsl-vhd.ps1 -nb 
 ```
 
+---
+
 ## Bash (Linux / WSL) `windows.sh` 
 
 Cross-platform bootstrap script for dev environments:
@@ -22,6 +24,8 @@ bash windows.sh
 
 Supports both Ubuntu/Debian and Arch Linux (including ArchWSL).
 Automatically detects distro and architecture (x86_64, aarch64) and installs system-specific dev tools.
+
+---
 
 ## JupyterLab `install_jupyter.sh`
 

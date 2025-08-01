@@ -4,7 +4,7 @@ This is a collection of Bash and Powershell scripts for Linux, WSL, and Windows 
 
 ---
 
-## Windows Powershell:
+## Windows Powershell `optimize-wsl-vhd.ps1`
 
 Optimize VHD's on Windows for storage bloat:
 ```bash
@@ -13,7 +13,7 @@ Set-ExecutionPolicy RemoteSigned -Scope Process
 .\optimize-wsl-vhd.ps1 -nb 
 ```
 
-## Bash (Linux / WSL):
+## Bash (Linux / WSL) `windows.sh` 
 
 Cross-platform bootstrap script for dev environments:
 ```bash

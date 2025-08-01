@@ -46,9 +46,9 @@ Installs JupyterLab inside a virtual environment (~/venvs/jupyter) with optional
 
 💡 Notes:
 
-- On Arch Linux, make sure xdg-utils is installed for browser auto-launch.
-- On WSL, the script will use wslview if available.
-- Adds Jupyter to ~/.local/bin for convenience.
+- On Arch Linux, make sure `xdg-utils` is installed for browser auto-launch.
+- On WSL, the script will use `wslview` if available.
+- Adds Jupyter to `~/.local/bin` for convenience.
 
 You can launch JupyterLab anytime with:
 ```bash

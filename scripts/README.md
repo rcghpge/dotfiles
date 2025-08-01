@@ -4,7 +4,7 @@ This is a collection of Bash and Powershell scripts for Linux, WSL, and Windows 
 
 ---
 
-## Windows Powershell `optimize-wsl-vhd.ps1`
+### Windows Powershell `optimize-wsl-vhd.ps1`
 
 Optimize VHD's on Windows for storage bloat:
 ```bash
@@ -15,7 +15,7 @@ Set-ExecutionPolicy RemoteSigned -Scope Process
 
 ---
 
-## Bash (Linux / WSL) on Windows `windows.sh` 
+### Bash (Linux / WSL) on Windows `windows.sh` 
 
 Bootstrap script for dev environments:
 ```bash
@@ -28,7 +28,7 @@ Should work on native-Ubuntu/Debian and Arch Linux
 
 ---
 
-## JupyterLab `install_jupyter.sh`
+### JupyterLab `install_jupyter.sh`
 
 Installs JupyterLab inside a virtual environment (~/venvs/jupyter) with optional browser auto-launch support.
 

@@ -53,6 +53,9 @@ Installs JupyterLab inside a virtual environment (~/venvs/jupyter) with optional
 You can launch JupyterLab anytime with:
 ```bash
 jupyter lab
+
+# Or - (still baking out the installer)
+jupyter lab --no-browser --ip=127.0.0.1 --port=8888 & sleep 3 && xdg-open "$(jupyter lab list 2>/dev/null | grep -o 'http://127.0.0.1:8888[^ ]*' | head -n1 || echo http://127.0.0.1:8888)"
 ```
 
 ---

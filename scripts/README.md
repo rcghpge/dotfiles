@@ -23,7 +23,8 @@ bash windows.sh
 Supports both Ubuntu/Debian and Arch Linux (including ArchWSL).
 Automatically detects distro and architecture (x86_64, aarch64) and installs system-specific dev tools.
 
-✅ install_jupyter.sh
+## JupyterLab `install_jupyter.sh`
+
 Installs JupyterLab inside a virtual environment (~/venvs/jupyter) with optional browser auto-launch support.
 
 📦 Usage:

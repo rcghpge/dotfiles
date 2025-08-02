@@ -4,7 +4,7 @@
 
 This repository contains unified dotfiles for:
 
-- Windows 10/11 (Bash: Git Bash, WSL)
+- Windows 10/11 (Bash: Git Bash, WSL, PowerShell)
 - FreeBSD (bash and sh)
 - Linux distributions (bash and sh)
 

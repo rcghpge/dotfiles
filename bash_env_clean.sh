@@ -1,5 +1,5 @@
 #!/bin/bash
-# This bash script cleans cached memory on your machine (Hugging Face, 
+# This bash script cleans cached memory on your machine (Hugging Face,
 # Pixi, pip, KaggleHub) and orphaned Python/Jupyter files from $HOME.
 
 echo "🔍 Initial disk usage in /home/$USER"
@@ -18,19 +18,19 @@ if [ -d "$HOME/.cache/rattler" ]; then
   rm -rf "$HOME/.cache/rattler"
 fi
 
-# KaggleHub (optional)
+# KaggleHub
 if [ -d "$HOME/.cache/kagglehub" ]; then
   echo "🧹 Deleting KaggleHub cache..."
   rm -rf "$HOME/.cache/kagglehub"
 fi
 
-# Pip cache (optional)
+# Pip cache
 if [ -d "$HOME/.cache/pip" ]; then
   echo "🧹 Deleting pip cache..."
   rm -rf "$HOME/.cache/pip"
 fi
 
-# Optional: Remove __pycache__ and .ipynb_checkpoints across home
+# __pycache__ and .ipynb_checkpoints across home
 echo "🧹 Removing __pycache__ and Jupyter checkpoints..."
 find "$HOME" -type d -name "__pycache__" -exec rm -rf {} +
 find "$HOME" -type d -name ".ipynb_checkpoints" -exec rm -rf {} +

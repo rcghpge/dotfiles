@@ -1,4 +1,61 @@
-[ -f ~/.aliases ] && source ~/.aliases
-[ -f ~/.exports ] && source ~/.exports
-[ -f ~/.functions ] && source ~/.functions
-export PS1="\[\e[32m\]\u@\h:\w \\\$\[\e[0m\] "
+# --- common dotfiles ---
+[ -f ~/.aliases ]   && . ~/.aliases
+[ -f ~/.exports ]   && . ~/.exports
+[ -f ~/.functions ] && . ~/.functions
+
+# Only set a fancy prompt for interactive shells
+[[ $- != *i* ]] && return
+
+# Detect WSL
+_is_wsl=false
+if grep -qi microsoft /proc/version 2>/dev/null || [[ -n $WSL_DISTRO_NAME ]]; then
+  _is_wsl=true
+fi
+
+# Colors via tput when available (portable), else ANSI as fallback
+if command -v tput >/dev/null 2>&1 && tput setaf 0 >/dev/null 2>&1; then
+  _c_reset='\['"$(tput sgr0)"'\]'
+  _c_red='\['"$(tput setaf 1; tput bold)"'\]'
+  _c_green='\['"$(tput setaf 2; tput bold)"'\]'
+  _c_cyan='\['"$(tput setaf 6; tput bold)"'\]'
+  _c_blue='\['"$(tput setaf 4; tput bold)"'\]'
+else
+  _c_reset='\[\e[0m\]'
+  _c_red='\[\e[1;31m\]'
+  _c_green='\[\e[1;32m\]'
+  _c_cyan='\[\e[1;36m\]'
+  _c_blue='\[\e[1;34m\]'
+fi
+
+# User color: root vs normal
+if (( EUID == 0 )); then _c_user=$_c_red; else _c_user=$_c_green; fi
+
+# Host color: different on SSH to hint you're remote
+if [[ -n $SSH_TTY ]]; then _c_host=$_c_red; else _c_host=$_c_cyan; fi
+
+# Optional: tiny git branch helper (no dependency on __git_ps1)
+_git_branch() {
+  local b
+  b="$(git symbolic-ref --quiet --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null)"
+  [[ -n $b ]] && printf ' (%s)' "$b"
+}
+
+# Optional: virtualenv name
+_pyenv_segment='${VIRTUAL_ENV:+($(basename "$VIRTUAL_ENV")) }'
+
+# Optional: WSL badge
+_wsl_segment=''
+$_is_wsl && _wsl_segment='[WSL] '
+
+# Build PS1 
+PS1="${_c_user}\u${_c_reset}@${_c_host}\h${_c_reset} ${_wsl_segment}${_pyenv_segment}${_c_blue}\w${_c_reset}\$ "
+
+# Append git info (kept separate so it never breaks the base prompt)
+PS1+='$( _git_branch ) '
+
+export PS1
+
+# Config for login shells - sources this file 
+# (Put this in ~/.bash_profile once; harmless if repeated)
+# [ -f ~/.bashrc ] && . ~/.bashrc
+

@@ -7,10 +7,22 @@ This is a collection of Bash and Powershell scripts for Linux, WSL, and Windows 
 ### Windows Powershell `optimize-wsl-vhd.ps1`
 
 Optimize VHD's on Windows for storage bloat:
-```bash
+```pwsh
 Set-ExecutionPolicy RemoteSigned -Scope Process
 # pass a -nb or -noBackup flag to skip generating a backup
 .\optimize-wsl-vhd.ps1 -nb 
+```
+
+### 'pswh-install.exe'
+```pwsh
+# Dry run with verbose
+pwsh -NoProfile -File .\scripts\pwsh-install.ps1 -Verbose -WhatIf
+
+# Real run (current user)
+pwsh -NoProfile -File .\scripts\pwsh-install.ps1 -Verbose
+
+# Machine-wide (admin)
+Start-Process pwsh -Verb RunAs -ArgumentList '-NoProfile','-File',"$PWD\scripts\pwsh-install.ps1",'-AllUsers','-Verbose'
 ```
 
 ---

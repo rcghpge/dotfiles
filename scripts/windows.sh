@@ -25,7 +25,7 @@ if [[ "$DISTRO_ID" == "ubuntu" || "$DISTRO_ID" == "debian" ]]; then
     git tree curl emacs neovim build-essential \
     python3 python3-pip python3-venv \
     wslu xdg-utils shellcheck speedtest-cli \
-    fonts-terminus || true   # TTF Terminus for GUI terminals
+    fonts-terminus fastfetch || true   # Terminus font + Fastfetch (Linux side)
 
 elif [[ "$DISTRO_ID" == "arch" ]]; then
   echo "🔄 Updating system..."
@@ -35,27 +35,30 @@ elif [[ "$DISTRO_ID" == "arch" ]]; then
   sudo pacman -S --noconfirm --needed \
     git tree curl emacs neovim base-devel \
     python python-pip wslu xdg-utils shellcheck speedtest-cli \
-    terminus-font ttf-terminus-nerd || true
+    terminus-font ttf-terminus-nerd fastfetch || true   # Terminus font + Fastfetch (Linux side)
 
 else
   echo "❌ Unsupported Linux distribution: $DISTRO_ID"
   exit 1
 fi
 
-echo "✅ Base setup complete for $DISTRO_ID ($ARCH)"
+echo "✅ Base setup complete for $DISTRO_ID ($ARCH) — Fastfetch available on Linux side"
 
-# ---------- WSL: set Windows Terminal default font ----------
+# ---------- WSL: set Windows Terminal default font & install Fastfetch ----------
 if is_wsl && have powershell.exe; then
-  echo "🪟 Detected WSL — configuring Windows Terminal font to '${WT_FONT}' (size ${WT_SIZE})"
+  echo "🪟 Detected WSL — configuring Windows Terminal font to '${WT_FONT}' (size ${WT_SIZE}) and installing Fastfetch on Windows side"
 
-  # Try to install a Terminus font on Windows host via winget (best-effort).
+  # Try to install Windows-side bits via winget (best-effort).
   powershell.exe -NoProfile -ExecutionPolicy Bypass -Command - <<'POWERSHELL' >/dev/null || true
 $ErrorActionPreference = "SilentlyContinue"
 if (Get-Command winget -ErrorAction SilentlyContinue) {
+  # Fonts
   winget install -e --id "NerdFonts.Terminusi386" --accept-package-agreements --accept-source-agreements 2>$null
   winget install -e --id "TerminusFont.TTF"       --accept-package-agreements --accept-source-agreements 2>$null
+  # Fastfetch CLI (Windows side)
+  winget install -e --id "Fastfetch.cli"          --accept-package-agreements --accept-source-agreements 2>$null
 } else {
-  Write-Host "winget not found on Windows; skipping font install."
+  Write-Host "winget not found on Windows; skipping font/Fastfetch install."
 }
 POWERSHELL
 
@@ -92,12 +95,13 @@ Write-Host "✅ Patched Windows Terminal: $settings"
 POWERSHELL
 
   echo "🔁 Restart Windows Terminal to apply the font change."
+  echo "ℹ️ Fastfetch installed on both Linux (WSL distro) and Windows sides."
 fi
-
 
 echo '   - Example usage: bash scripts/windows.sh "Terminus Nerd Font" 12   # if you want glyphs'
 echo ""
 echo "💡 Next steps:"
+echo "   - Run 'fastfetch' in Linux or Windows Terminal to see system info"
 echo "   - Optional: ./install_jupyter.sh"
 echo "   - Optional: ./install_pdf_export.sh"
 echo "   - Optional: ./shellcheck_dotfiles.sh"

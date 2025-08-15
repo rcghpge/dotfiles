@@ -2,6 +2,8 @@
 [![PowerShell](https://github.com/rcghpge/dotfiles/actions/workflows/powershell.yml/badge.svg)](https://github.com/rcghpge/dotfiles/actions/workflows/powershell.yml)
 [![Shell Lint](https://github.com/rcghpge/dotfiles/actions/workflows/lint.yml/badge.svg)](https://github.com/rcghpge/dotfiles/actions/workflows/lint.yml)
 
+<center><img src="https://github.com/rcghpge/dotfiles/blob/main/assets/rcghpge.png?raw=true" width=50% alt="Windows 10 Pro dotfiles"></center>
+
 This repository contains unified dotfiles for:
 
 - Windows 10/11 (Bash: Git Bash, WSL, PowerShell)

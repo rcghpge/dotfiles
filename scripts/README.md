@@ -14,6 +14,8 @@ Set-ExecutionPolicy RemoteSigned -Scope Process
 ```
 
 ### `pswh-install.exe`
+
+Installs pwsh essentials:
 ```pwsh
 # Dry run with verbose
 pwsh -NoProfile -File .\scripts\pwsh-install.ps1 -Verbose -WhatIf

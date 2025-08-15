@@ -33,11 +33,11 @@
   Created: 2025-08-14
   Author: rcghpge (https://github.com/rcghpge)
   License: MIT - https://opensource.org/licenses/MIT
-  Version: 0.1.5
+  Version: 0.1.6
   Repository: https://github.com/rcghpge/dotfiles
 #>
 
-[CmdletBinding(SupportsShouldProcess)]
+[CmdletBinding(SupportsShouldProcess = $true)]
 param(
   [switch]$AllUsers,
   [switch]$IncludeOptional
@@ -47,7 +47,8 @@ Set-StrictMode -Version Latest
 $InformationPreference = 'Continue'
 
 function Test-Admin {
-  [CmdletBinding()] param()
+  [CmdletBinding()]
+  param()
   try {
     $wi = [Security.Principal.WindowsIdentity]::GetCurrent()
     $wp = New-Object Security.Principal.WindowsPrincipal($wi)
@@ -59,7 +60,8 @@ function Test-Admin {
 }
 
 function Get-WingetBinary {
-  [CmdletBinding()] param()
+  [CmdletBinding()]
+  param()
   $candidates = @(
     'winget',
     'winget.exe',
@@ -71,7 +73,7 @@ function Get-WingetBinary {
       $cmd = Get-Command -Name $c -ErrorAction Stop
       return $cmd.Source
     } catch {
-      Write-Verbose "Winget candidate not found: $c  ($_)"  # no empty catch
+      Write-Verbose "Winget candidate not found: $c  ($($_.Exception.Message))"
     }
   }
   return $null
@@ -80,7 +82,7 @@ function Get-WingetBinary {
 $Winget = Get-WingetBinary
 if (-not $Winget) {
   Write-Error "winget not found. Run in Windows PowerShell/Terminal, or from WSL via 'powershell.exe'."
-  exit 1
+  throw "winget is required"
 }
 
 if ($AllUsers -and -not (Test-Admin)) {
@@ -88,13 +90,18 @@ if ($AllUsers -and -not (Test-Admin)) {
   $AllUsers = $false
 }
 
-function Ensure-WingetSources {
-  [CmdletBinding()] param()
+function Initialize-WingetSource {
+  [CmdletBinding()]
+  param()
   try {
     $null = & $Winget source list 2>&1
   } catch {
     Write-Information "winget sources look unhealthy; resetting."
-    try { & $Winget source reset --force | Out-Null } catch { Write-Verbose "source reset failed: $($_.Exception.Message)" }
+    try {
+      & $Winget source reset --force | Out-Null
+    } catch {
+      Write-Verbose "winget source reset failed: $($_.Exception.Message)"
+    }
   }
   try {
     & $Winget source update | Out-Null
@@ -102,6 +109,9 @@ function Ensure-WingetSources {
     Write-Verbose "winget source update failed: $($_.Exception.Message)"
   }
 }
+
+# Back-compat alias (old name  new function)
+Set-Alias -Name Ensure-WingetSources -Value Initialize-WingetSource
 
 # Optional fallback IDs if a primary ID isn't found (-1978335212)
 $WingetIdFallbacks = @{
@@ -111,7 +121,7 @@ $WingetIdFallbacks = @{
 }
 
 function Install-WingetPackage {
-  [CmdletBinding(SupportsShouldProcess)]
+  [CmdletBinding(SupportsShouldProcess = $true)]
   param(
     [Parameter(Mandatory)] [string]$Id,
     [string]$Name = $Id,
@@ -123,18 +133,18 @@ function Install-WingetPackage {
 
   $attemptIds = ,$Id + ($WingetIdFallbacks[$Id] | ForEach-Object { $_ })
   foreach ($tryId in $attemptIds) {
-    $args = $baseArgs.Clone()
-    $args[4] = $tryId  # replace the id in-place
+    $wingetArgs = $baseArgs.Clone()
+    $wingetArgs[4] = $tryId  # replace the id in-place
 
-    if ($PSCmdlet.ShouldProcess($Name, "winget $($args -join ' ')")) {
+    if ($PSCmdlet.ShouldProcess($Name, "winget $($wingetArgs -join ' ')")) {
       Write-Information "Installing $Name ($tryId)."
-      $proc = Start-Process -FilePath $Winget -ArgumentList $args -NoNewWindow -PassThru -Wait
+      $proc = Start-Process -FilePath $Winget -ArgumentList $wingetArgs -NoNewWindow -PassThru -Wait
 
       switch ($proc.ExitCode) {
-        0 { return }  # success
-        -1978335212 { Write-Verbose "Package not found for ${Name} ($tryId). Trying fallback (if any)..." } # no package found
-        -2147024891 { throw "Access denied installing $Name ($tryId). Try an elevated session or disable AllUsers." } # 0x80070005
-        Default { Write-Verbose "winget exit code for ${Name}: $($proc.ExitCode)"; throw "Failed to install $Name ($tryId)" }
+        0               { return }  # success
+        -1978335212     { Write-Verbose "Package not found for ${Name} ($tryId). Trying fallback (if any)..." } # no package found
+        -2147024891     { throw "Access denied installing $Name ($tryId). Try an elevated session or disable AllUsers." } # 0x80070005
+        Default         { Write-Verbose "winget exit code for ${Name}: $($proc.ExitCode)"; throw "Failed to install $Name ($tryId)" }
       }
     }
   }
@@ -167,7 +177,7 @@ if ($IncludeOptional) {
 }
 
 # --- Heal sources, then install ---
-Ensure-WingetSources
+Initialize-WingetSource
 
 foreach ($p in $packages) {
   try {
@@ -205,6 +215,7 @@ $report = foreach ($p in $packages) {
     Path  = if ($ok) { (Get-Command $p.Cmd).Source } else { $null }
   }
 }
+
 $report | Format-Table -AutoSize | Out-String | Write-Output
 
 Write-Information "Done. Open a new Windows Terminal/PowerShell tab to ensure PATH is refreshed."

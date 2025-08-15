@@ -13,7 +13,7 @@ Set-ExecutionPolicy RemoteSigned -Scope Process
 .\optimize-wsl-vhd.ps1 -nb 
 ```
 
-### 'pswh-install.exe'
+### `pswh-install.exe`
 ```pwsh
 # Dry run with verbose
 pwsh -NoProfile -File .\scripts\pwsh-install.ps1 -Verbose -WhatIf

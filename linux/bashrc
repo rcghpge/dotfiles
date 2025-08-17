@@ -55,7 +55,15 @@ PS1+='$( _git_branch ) '
 
 export PS1
 
+# Linux cofigs
+# LnOS (Arch Linux)
+
+# Web browsers
+alias google-chrome='google-chrome-stable --ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations --force-device-scale-factor=1.5 & disown'
+
+
 # Config for login shells - sources this file 
 # (Put this in ~/.bash_profile once; harmless if repeated)
 # [ -f ~/.bashrc ] && . ~/.bashrc
+
 

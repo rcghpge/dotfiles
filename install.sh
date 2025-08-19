@@ -11,40 +11,57 @@ echo "🛠️ Installing dotfiles..."
 have()   { command -v "$1" >/dev/null 2>&1; }
 is_wsl() { grep -qi microsoft /proc/version 2>/dev/null; }
 
+# realpath/readlink -f portability (FreeBSD sometimes lacks -f on readlink)
 resolve_path() {
+  # Usage: resolve_path <path>
+  # Prints an absolute canonical path or echoes the input if resolution fails.
   if have realpath; then
     realpath "$1" 2>/dev/null || printf '%s\n' "$1"
   elif have readlink; then
+    # shellcheck disable=SC2012
     readlink -f "$1" 2>/dev/null || printf '%s\n' "$1"
   else
     printf '%s\n' "$1"
   fi
 }
 
+# Resolve repo root so symlinks don't depend on $PWD
 # shellcheck disable=SC2164
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+
 timestamp() { date +"%Y%m%d-%H%M%S"; }
 
 backup() {
+  # Backup existing target if it's a real file/dir (not our identical symlink)
+  # $1 = dst, $2 = intended source absolute path
   local dst="$1"
   local intended="$2"
+
   if [[ -e "$dst" || -L "$dst" ]]; then
     if [[ -L "$dst" ]]; then
       local target
       target="$(resolve_path "$(readlink "$dst" || true)")"
-      [[ "$target" == "$intended" ]] && return 0
+      # If the symlink already points to the intended source, do nothing
+      if [[ "$target" == "$intended" ]]; then
+        return 0
+      fi
     fi
-    local bak; bak="${dst}.bak.$(timestamp)"
+    local bak
+    bak="${dst}.bak.$(timestamp)"
     mv -f -- "$dst" "$bak"
     echo "🗂  Backed up $(basename "$dst") → $bak"
   fi
 }
 
 link_if_exists() {
-  local src="$1" dst="$2"
+  # $1 = source (may be relative or absolute), $2 = dest path
+  local src="$1"
+  local dst="$2"
+
   if [[ -e "$src" ]]; then
     mkdir -p -- "$(dirname "$dst")"
-    local abs_src; abs_src="$(resolve_path "$src")"
+    local abs_src
+    abs_src="$(resolve_path "$src")"
     backup "$dst" "$abs_src"
     ln -sfn -- "$abs_src" "$dst"
     echo "↪ linked $(basename "$dst") → $abs_src"
@@ -54,6 +71,7 @@ link_if_exists() {
 }
 
 heal_bashrc_if_broken() {
+  # Replace broken ~/.bashrc symlink with a sane file
   if [[ -L "$HOME/.bashrc" && ! -e "$HOME/.bashrc" ]]; then
     echo "🩹 Fixing broken ~/.bashrc symlink..."
     rm -f -- "$HOME/.bashrc"
@@ -68,6 +86,7 @@ heal_bashrc_if_broken() {
 }
 
 ensure_bash_profile_sources_bashrc() {
+  # Make sure login shells source ~/.bashrc
   if [[ ! -f "$HOME/.bash_profile" ]]; then
     printf '%s\n' '[ -f ~/.bashrc ] && . ~/.bashrc' > "$HOME/.bash_profile"
     echo "📝 Created ~/.bash_profile to source ~/.bashrc"
@@ -79,20 +98,21 @@ ensure_bash_profile_sources_bashrc() {
   fi
 }
 
-# --- Detect OS ---
+# --- Detect Operating System ---
 OS=""
 if (grep -qi "FreeBSD" /etc/os-release 2>/dev/null) || uname | grep -qi "FreeBSD" >/dev/null 2>&1; then
   OS="freebsd"
 elif is_wsl; then
-  OS="wsl"
+  OS="wsl"               # Treat WSL as Linux for shell files; still allow WT tweaks
 elif [[ "${OSTYPE:-}" == msys || "${OSTYPE:-}" == cygwin ]]; then
-  OS="windows"
+  OS="windows"           # Git Bash / MSYS / Cygwin
 elif (grep -qi "linux" /proc/version 2>/dev/null) || [[ "${OSTYPE:-}" == linux-gnu* ]]; then
   OS="linux"
 else
   echo "❌ Unsupported OS"
   exit 1
 fi
+
 echo "Detected OS: $OS"
 
 # --- Common symlinks ---
@@ -100,7 +120,7 @@ link_if_exists "$REPO_DIR/common/aliases"   "$HOME/.aliases"
 link_if_exists "$REPO_DIR/common/exports"   "$HOME/.exports"
 link_if_exists "$REPO_DIR/common/functions" "$HOME/.functions"
 
-# --- OS-specific ---
+# --- OS-specific shell files ---
 case "$OS" in
   windows)
     link_if_exists "$REPO_DIR/windows/bash_profile" "$HOME/.bash_profile"
@@ -114,6 +134,7 @@ case "$OS" in
     link_if_exists "$REPO_DIR/freebsd/shrc"         "$HOME/.shrc"
     ;;
   linux|wsl)
+    # WSL uses Linux shell files (don’t point at windows/bashrc)
     link_if_exists "$REPO_DIR/linux/bash_profile" "$HOME/.bash_profile"
     link_if_exists "$REPO_DIR/linux/bashrc"       "$HOME/.bashrc"
     link_if_exists "$REPO_DIR/linux/profile"      "$HOME/.profile"
@@ -121,36 +142,90 @@ case "$OS" in
     ;;
 esac
 
+# Self-heal if something left a broken bashrc
 heal_bashrc_if_broken
 ensure_bash_profile_sources_bashrc
 
-# --- Optional installers/helpers ---
+# --- Optional: distro-aware Fastfetch install (Linux/WSL/FreeBSD) ---
 install_fastfetch_maybe() {
-  if [[ "${DOTFILES_INSTALL_FASTFETCH:-0}" != "1" ]]; then return 0; fi
+  # Controlled via DOTFILES_INSTALL_FASTFETCH=1
+  if [[ "${DOTFILES_INSTALL_FASTFETCH:-0}" != "1" ]]; then
+    return 0
+  fi
+
   if [[ "$OS" == "linux" || "$OS" == "wsl" ]]; then
-    . /etc/os-release 2>/dev/null || true
+    # shellcheck source=/etc/os-release
+    if [[ -r /etc/os-release ]]; then
+      . /etc/os-release
+    else
+      ID=""
+    fi
+
     case "${ID:-}" in
-      arch*|manjaro)   have pacman && sudo pacman -Sy --needed fastfetch || true ;;
-      ubuntu|debian*)  have apt && sudo apt update && sudo apt install -y fastfetch || true ;;
-      fedora)          have dnf && sudo dnf install -y fastfetch || true ;;
-      alpine)          have apk && sudo apk add fastfetch || true ;;
-      opensuse*|sles)  have zypper && sudo zypper --non-interactive in fastfetch || true ;;
-      *) echo "ℹ️  Skipping Fastfetch (unknown distro: ${ID:-unknown})." ;;
+      arch|artix|endeavouros|manjaro)
+        if have pacman; then
+          sudo pacman -Sy --needed fastfetch || true
+        fi
+        ;;
+      ubuntu|debian|linuxmint|pop)
+        if have apt; then
+          sudo apt update || true
+          sudo apt install -y fastfetch || true
+        fi
+        ;;
+      fedora)
+        if have dnf; then
+          sudo dnf install -y fastfetch || true
+        fi
+        ;;
+      alpine)
+        if have apk; then
+          sudo apk add fastfetch || true
+        fi
+        ;;
+      opensuse*|sles)
+        if have zypper; then
+          sudo zypper --non-interactive in fastfetch || true
+        fi
+        ;;
+      *)
+        echo "ℹ️  Skipping Fastfetch (unknown Linux distro: ${ID:-unknown})."
+        ;;
     esac
+
   elif [[ "$OS" == "freebsd" ]]; then
-    have pkg && sudo pkg install -y fastfetch || true
+    if have pkg; then
+      sudo pkg install -y fastfetch || true
+    fi
   fi
 }
+
+# --- Optional: fonts/bootstrap helpers ---
+# Set DOTFILES_SKIP_FONTS=1 to skip.
 run_bootstrap_helpers() {
-  if [[ "${DOTFILES_SKIP_FONTS:-0}" == "1" ]]; then return 0; fi
-  chmod +x "$REPO_DIR/scripts/bsd-linux.sh" "$REPO_DIR/scripts/windows.sh" 2>/dev/null || true
-  if [[ "$OS" == "freebsd" || "$OS" == "linux" || "$OS" == "wsl" ]]; then
-    [[ -x "$REPO_DIR/scripts/bsd-linux.sh" ]] && bash "$REPO_DIR/scripts/bsd-linux.sh" "${BSD_FONT_CONSOLE:-}" || true
+  if [[ "${DOTFILES_SKIP_FONTS:-0}" == "1" ]]; then
+    return 0
   fi
+
+  # Mark helpers executable if present
+  chmod +x "$REPO_DIR/scripts/bsd-linux.sh" "$REPO_DIR/scripts/windows.sh" 2>/dev/null || true
+
+  # Console fonts, etc. for BSD/Linux/WSL
+  if [[ "$OS" == "freebsd" || "$OS" == "linux" || "$OS" == "wsl" ]]; then
+    if [[ -x "$REPO_DIR/scripts/bsd-linux.sh" ]]; then
+      bash "$REPO_DIR/scripts/bsd-linux.sh" "${BSD_FONT_CONSOLE:-}" || true
+    fi
+  fi
+
+  # Windows Terminal tweaks for Windows AND WSL (from Linux using interop or from MSYS/Cygwin)
   if [[ "$OS" == "windows" || "$OS" == "wsl" ]]; then
-    [[ -x "$REPO_DIR/scripts/windows.sh" ]] && bash "$REPO_DIR/scripts/windows.sh" "${WT_FONT:-}" "${WT_SIZE:-}" || true
+    if [[ -x "$REPO_DIR/scripts/windows.sh" ]]; then
+      bash "$REPO_DIR/scripts/windows.sh" "${WT_FONT:-}" "${WT_SIZE:-}" || true
+    fi
   fi
 }
+
+# --- WSL niceties (non-fatal) ---
 wsl_tips() {
   if [[ "$OS" == "wsl" ]]; then
     if [[ ! -f /etc/wsl.conf ]] || ! grep -q '^\[automount\]' /etc/wsl.conf 2>/dev/null; then
@@ -163,6 +238,7 @@ WSLTIP
   fi
 }
 
+# Run optional installers/helpers
 install_fastfetch_maybe
 run_bootstrap_helpers
 wsl_tips

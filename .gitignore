@@ -48,6 +48,9 @@ Desktop.ini
 .local
 *.local
 
+# Local Directories
+dev/
+
 #---------------------------------------------------
 # Git-specific local configs
 #---------------------------------------------------

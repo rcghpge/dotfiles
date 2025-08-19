@@ -18,14 +18,13 @@ resolve_path() {
   if have realpath; then
     realpath "$1" 2>/dev/null || printf '%s\n' "$1"
   elif have readlink; then
-    # shellcheck disable=SC2012
     readlink -f "$1" 2>/dev/null || printf '%s\n' "$1"
   else
     printf '%s\n' "$1"
   fi
 }
 
-# Resolve repo root so symlinks don't depend on $PWD
+# Resolver for symlinks - $PWD
 # shellcheck disable=SC2164
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 
@@ -120,7 +119,7 @@ link_if_exists "$REPO_DIR/common/aliases"   "$HOME/.aliases"
 link_if_exists "$REPO_DIR/common/exports"   "$HOME/.exports"
 link_if_exists "$REPO_DIR/common/functions" "$HOME/.functions"
 
-# --- OS-specific shell files ---
+# --- OS shell files ---
 case "$OS" in
   windows)
     link_if_exists "$REPO_DIR/windows/bash_profile" "$HOME/.bash_profile"
@@ -142,7 +141,7 @@ case "$OS" in
     ;;
 esac
 
-# Self-heal if something left a broken bashrc
+# Fallbacks if something left a broken bashrc
 heal_bashrc_if_broken
 ensure_bash_profile_sources_bashrc
 
@@ -154,48 +153,26 @@ install_fastfetch_maybe() {
   fi
 
   if [[ "$OS" == "linux" || "$OS" == "wsl" ]]; then
-    # shellcheck source=/etc/os-release
-    if [[ -r /etc/os-release ]]; then
-      . /etc/os-release
+    if have pacman; then
+      sudo pacman -Sy --needed fastfetch || true
+    elif have apt; then
+      sudo apt update || true
+      sudo apt install -y fastfetch || true
+    elif have dnf; then
+      sudo dnf install -y fastfetch || true
+    elif have apk; then
+      sudo apk add fastfetch || true
+    elif have zypper; then
+      sudo zypper --non-interactive in fastfetch || true
     else
-      ID=""
+      echo "ℹ️  Skipping Fastfetch (no known package manager found)."
     fi
-
-    case "${ID:-}" in
-      arch|artix|endeavouros|manjaro)
-        if have pacman; then
-          sudo pacman -Sy --needed fastfetch || true
-        fi
-        ;;
-      ubuntu|debian|linuxmint|pop)
-        if have apt; then
-          sudo apt update || true
-          sudo apt install -y fastfetch || true
-        fi
-        ;;
-      fedora)
-        if have dnf; then
-          sudo dnf install -y fastfetch || true
-        fi
-        ;;
-      alpine)
-        if have apk; then
-          sudo apk add fastfetch || true
-        fi
-        ;;
-      opensuse*|sles)
-        if have zypper; then
-          sudo zypper --non-interactive in fastfetch || true
-        fi
-        ;;
-      *)
-        echo "ℹ️  Skipping Fastfetch (unknown Linux distro: ${ID:-unknown})."
-        ;;
-    esac
 
   elif [[ "$OS" == "freebsd" ]]; then
     if have pkg; then
       sudo pkg install -y fastfetch || true
+    else
+      echo "ℹ️  Skipping Fastfetch (pkg not found)."
     fi
   fi
 }
@@ -207,7 +184,7 @@ run_bootstrap_helpers() {
     return 0
   fi
 
-  # Mark helpers executable if present
+  # Set helpers executable if present
   chmod +x "$REPO_DIR/scripts/bsd-linux.sh" "$REPO_DIR/scripts/windows.sh" 2>/dev/null || true
 
   # Console fonts, etc. for BSD/Linux/WSL
@@ -217,7 +194,7 @@ run_bootstrap_helpers() {
     fi
   fi
 
-  # Windows Terminal tweaks for Windows AND WSL (from Linux using interop or from MSYS/Cygwin)
+  # Windows Terminal configs for Windows AND WSL (from Linux using interop or from MSYS/Cygwin)
   if [[ "$OS" == "windows" || "$OS" == "wsl" ]]; then
     if [[ -x "$REPO_DIR/scripts/windows.sh" ]]; then
       bash "$REPO_DIR/scripts/windows.sh" "${WT_FONT:-}" "${WT_SIZE:-}" || true

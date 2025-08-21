@@ -1,7 +1,91 @@
-# ~/.shrc — interactive goodies
-PS1='\u@\h:\w\$ '; export PS1
-alias ll='ls -alF' la='ls -A' l='ls -CF'
+# ~/.shrc — portable, colorized, and safe
 
-# GPG settings
-export GPG_TTY="$(tty)"
+# --- Load user dotfiles if present ---
+[ -f "$HOME/.aliases" ]   && . "$HOME/.aliases"
+[ -f "$HOME/.exports" ]   && . "$HOME/.exports"
+[ -f "$HOME/.functions" ] && . "$HOME/.functions"
 
+# --- Only run in interactive shells ---
+case $- in *i*) ;; *) return ;; esac
+
+# --- Colors via tput when available (portable) ---
+if command -v tput >/dev/null 2>&1 && tput setaf 0 >/dev/null 2>&1; then
+  _c_reset="$(tput sgr0)"
+  _c_bold="$(tput bold)"
+  _c_red="$(tput setaf 1)"
+  _c_grn="$(tput setaf 2)"
+  _c_cyn="$(tput setaf 6)"
+  _c_blu="$(tput setaf 4)"
+else
+  _c_reset="$(printf '\033[0m')"
+  _c_bold="$(printf '\033[1m')"
+  _c_red="$(printf '\033[31m')"
+  _c_grn="$(printf '\033[32m')"
+  _c_cyn="$(printf '\033[36m')"
+  _c_blu="$(printf '\033[34m')"
+fi
+
+# --- POSIX /bin/sh prompt (colored if tput works) ---
+PS1='\u@\h:\w\$ '  # plain fallback
+# Upgrade to color on any POSIX shell (e.g., FreeBSD /bin/sh)
+PS1="${_c_grn}\u${_c_reset}@${_c_cyn}\h${_c_reset}:${_c_blu}\w${_c_reset}\$ "
+export PS1
+
+# --- Portable aliases (GNU/BSD aware) ---
+# ls: prefer GNU --color, else BSD -G
+if ls --color=auto -d . >/dev/null 2>&1; then
+  alias ls='ls --color=auto -F'
+  alias ll='ls -alF --color=auto'
+  alias la='ls -A --color=auto'
+else
+  alias ls='ls -GF'
+  alias ll='ls -alGF'
+  alias la='ls -AGF'
+fi
+
+# grep colors (works on GNU & BSD grep)
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+
+# Pager defaults
+export LESS='-R -M -i'
+export LESSHISTFILE=-
+export PAGER=less
+
+# LS_COLORS if dircolors exists (noop on BSD)
+if command -v dircolors >/dev/null 2>&1; then
+  if [ -f "$HOME/.dircolors" ]; then
+    eval "$(dircolors -b "$HOME/.dircolors" 2>/dev/null || true)"
+  else
+    eval "$(dircolors -b 2>/dev/null || true)"
+  fi
+fi
+
+# --- GPG pinentry: bind to current tty when available ---
+if tty_out="$(tty 2>/dev/null)"; then
+  export GPG_TTY="$tty_out"
+fi
+
+# --- Bash/Zsh ---
+if [ -n "$BASH_VERSION" ] || [ -n "$ZSH_VERSION" ]; then
+  _git_branch() {
+    command -v git >/dev/null 2>&1 || return
+    b="$(git symbolic-ref --quiet --short HEAD 2>/dev/null || \
+        git describe --tags --exact-match 2>/dev/null)"
+    [ -n "$b" ] && printf ' (%s)' "$b"
+  }
+
+  # Bash
+  if [ -n "$BASH_VERSION" ]; then
+    PS1="\[${_c_grn}\]\u\[${_c_reset}\]@\[${_c_cyn}\]\h\[${_c_reset}\]:\[${_c_blu}\]\w\[${_c_reset}\]"'$( _git_branch )\$ '
+    export PS1
+  fi
+
+  # Zsh equivalent
+  if [ -n "$ZSH_VERSION" ]; then
+    setopt PROMPT_SUBST
+    PS1="%F{green}%n%f@%F{cyan}%m%f:%F{blue}%~%f$ "='$(_git_branch)''$ '
+    export PS1
+  fi
+fi

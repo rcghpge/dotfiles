@@ -1,3 +1,11 @@
-if [ -f ~/.bash_profile ]; then
-    source ~/.bash_profile
-fi
+# ~/.profile — FreeBSD /bin/sh
+
+# Load ~/.shrc for interactive shells
+case "$-" in
+  *i*) [ -f "$HOME/.shrc" ] && export ENV="$HOME/.shrc" ;;
+esac
+
+# Basic env
+PATH="$HOME/bin:$HOME/.local/bin:$PATH"; export PATH
+umask 022
+: "${EDITOR:=vi}"; export EDITOR

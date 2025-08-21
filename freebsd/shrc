@@ -1,4 +1,7 @@
-set +o emacs
-export PATH="$HOME/bin:$PATH"
-alias ll='ls -lF'
-alias la='ls -A'
+# ~/.shrc — interactive goodies
+PS1='\u@\h:\w\$ '; export PS1
+alias ll='ls -alF' la='ls -A' l='ls -CF'
+
+# GPG settings
+export GPG_TTY="$(tty)"
+

@@ -89,3 +89,7 @@ if [ -n "$BASH_VERSION" ] || [ -n "$ZSH_VERSION" ]; then
     export PS1
   fi
 fi
+
+# Keyboard settings
+stty erase ^H
+set -o vi

@@ -35,12 +35,40 @@ elif [[ "$DISTRO_ID" == "arch" ]]; then
   sudo pacman -S --noconfirm --needed \
     git tree curl emacs neovim base-devel \
     python python-pip wslu xdg-utils shellcheck speedtest-cli \
+    nano \
     terminus-font ttf-terminus-nerd fastfetch || true   # Terminus font + Fastfetch (Linux side)
 
 else
   echo "❌ Unsupported Linux distribution: $DISTRO_ID"
   exit 1
 fi
+
+# --- Pixi (Prefix.dev) install (Arch/WSL safe) ---
+install_pixi() {
+  if command -v pixi >/dev/null 2>&1; then
+    echo "[OK] pixi already installed: $(pixi --version)"
+    return 0
+  fi
+
+  echo "[INFO] Installing pixi from official installer..."
+  # Install as the current (non-root) user so it lands in ~/.pixi/bin
+  # If your script runs as root, use: sudo -u "$SUDO_USER" bash -lc 'curl ...'
+  curl -fsSL https://pixi.sh/install.sh | bash
+
+  # Ensure current shell can find it right away
+  export PATH="$HOME/.pixi/bin:$PATH"
+  hash -r
+
+  if ! command -v pixi >/dev/null 2>&1; then
+    echo "[ERROR] pixi not found on PATH after install. Check that ~/.pixi/bin exists and PATH is exported."
+    echo "        Try: export PATH=\"\$HOME/.pixi/bin:\$PATH\""
+    return 1
+  fi
+
+  echo "[OK] pixi installed: $(pixi --version)"
+}
+
+install_pixi
 
 echo "✅ Base setup complete for $DISTRO_ID ($ARCH) — Fastfetch available on Linux side"
 

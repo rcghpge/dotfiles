@@ -57,7 +57,6 @@ export PS1
 
 # Linux cofigs
 # LnOS (Arch Linux)
-
 # Web browsers
 alias google-chrome='google-chrome-stable --ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations --force-device-scale-factor=1.5 & disown'
 
@@ -67,3 +66,4 @@ alias google-chrome='google-chrome-stable --ozone-platform-hint=auto --enable-fe
 # [ -f ~/.bashrc ] && . ~/.bashrc
 
 
+export PATH="/home/rc/.pixi/bin:$PATH"

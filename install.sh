@@ -202,7 +202,7 @@ run_bootstrap_helpers() {
   fi
 }
 
-# --- WSL niceties (non-fatal) ---
+# --- WSL niceties ---
 wsl_tips() {
   if [[ "$OS" == "wsl" ]]; then
     if [[ ! -f /etc/wsl.conf ]] || ! grep -q '^\[automount\]' /etc/wsl.conf 2>/dev/null; then

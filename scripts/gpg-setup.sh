@@ -184,13 +184,13 @@ ok "wrote $GPG_CONF"
 
 # --- Export GPG_TTY in all common shells ---
 # POSIX sh / bash / zsh
-ensure_line "export GPG_TTY="$(tty)"" "$HOME/.profile"
-ensure_line "export GPG_TTY="$(tty)"" "$HOME/.bashrc"
-ensure_line "export GPG_TTY="$(tty)"" "$HOME/.zshrc"
+ensure_line "export GPG_TTY=\"\$(tty)\"" "$HOME/.profile"
+ensure_line "export GPG_TTY=\"\$(tty)\"" "$HOME/.bashrc"
+ensure_line "export GPG_TTY=\"\$(tty)\"" "$HOME/.zshrc"
 
-# tcsh / csh
-ensure_line "setenv GPG_TTY "`tty`"" "$HOME/.cshrc"
-ensure_line "setenv GPG_TTY "`tty`"" "$HOME/.tcshrc"
+# tcsh/csh
+ensure_line "setenv GPG_TTY \"\$(tty)\"" "$HOME/.cshrc"
+ensure_line "setenv GPG_TTY \"\$(tty)\"" "$HOME/.tcshrc"
 
 # Current session
 if TTY_NOW=$(tty 2>/dev/null); then

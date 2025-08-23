@@ -28,18 +28,59 @@ if [[ "$DISTRO_ID" == "ubuntu" || "$DISTRO_ID" == "debian" ]]; then
     fonts-terminus fastfetch || true   # Terminus font + Fastfetch (Linux side)
 
 elif [[ "$DISTRO_ID" == "arch" ]]; then
-  echo "🔄 Updating system..."
+  echo " ^=^t^d Updating system..."
   sudo pacman -Syu --noconfirm
 
-  echo "📦 Installing base packages for Arch Linux..."
-  sudo pacman -S --noconfirm --needed \
-    git tree curl emacs neovim base-devel \
-    python python-pip wslu xdg-utils shellcheck speedtest-cli \
-    nano \
-    terminus-font ttf-terminus-nerd fastfetch || true   # Terminus font + Fastfetch (Linux side)
+  echo " ^=^s Installing base packages for Arch Linux (official repos)..."
+  # Official repo packages (safe for Arch)
+  PAC_PKGS=(
+    git tree curl emacs neovim base-devel
+    python python-pip xdg-utils shellcheck speedtest-cli
+    nano less fastfetch
+    terminus-font   # console Terminus font (official)
+  )
 
+  # Filter to only those in official Arch Linux repos 
+  TO_INSTALL=()
+  for p in "${PAC_PKGS[@]}"; do
+    if pacman -Si "$p" >/dev/null 2>&1; then
+      TO_INSTALL+=("$p")
+    else
+      echo " [skip] $p not in official repos"
+    fi
+  done
+
+  if ((${#TO_INSTALL[@]})); then
+    sudo pacman -S --noconfirm --needed "${TO_INSTALL[@]}"
+  else
+    echo " [info] Nothing to install from official repos."
+  fi
+
+  echo " ^=^s (Optional) Installing AUR packages if helper is available..."
+  AUR_PKGS=(
+    wslu               # AUR on Arch (Ubuntu WSL tool)
+    ttf-terminus-nerd  # Nerd font variant (AUR)
+  )
+
+  # Detect an AUR helper
+  AUR_HELPER=""
+  if command -v paru >/dev/null 2>&1; then
+    AUR_HELPER="paru"
+  elif command -v yay >/dev/null 2>&1; then
+    AUR_HELPER="yay"
+  fi
+
+  if [[ -n "$AUR_HELPER" ]]; then
+    for a in "${AUR_PKGS[@]}"; do
+      if ! pacman -Qi "$a" >/dev/null 2>&1; then
+        "$AUR_HELPER" -S --noconfirm "$a" || echo " [warn] Failed AUR install: $a"
+      fi
+    done
+  else
+    echo " [note] No AUR helper (paru/yay) found; skipping AUR packages: ${AUR_PKGS[*]}"
+  fi
 else
-  echo "❌ Unsupported Linux distribution: $DISTRO_ID"
+  echo " ^}^l Unsupported Linux distribution: $DISTRO_ID"
   exit 1
 fi
 

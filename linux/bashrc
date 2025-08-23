@@ -67,3 +67,4 @@ alias google-chrome='google-chrome-stable --ozone-platform-hint=auto --enable-fe
 
 
 export PATH="/home/rc/.pixi/bin:$PATH"
+export GPG_TTY="$(tty)"

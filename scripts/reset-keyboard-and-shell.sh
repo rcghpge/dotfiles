@@ -1,4 +1,5 @@
 #!/bin/sh
+# This bash script resets the keyboard for FreeBSD 14.2 running on KDE Plasma 6
 # reset-keyboard-and-shell.sh — reset .shrc, keymap, and KDE keyboard configs
 
 TS=$(date +%s)

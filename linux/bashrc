@@ -1,7 +1,12 @@
-w# --- common dotfiles ---
+# --- common dotfiles ---
 [ -f ~/.aliases ]   && . ~/.aliases
 [ -f ~/.exports ]   && . ~/.exports
 [ -f ~/.functions ] && . ~/.functions
+
+
+# Ensure PS1 is defined for non-interactive shells
+: "${PS1:=}"
+export PS1
 
 # Only set a fancy prompt for interactive shells
 [[ $- != *i* ]] && return
@@ -50,7 +55,7 @@ $_is_wsl && _wsl_segment='[WSL] '
 # Build PS1 
 PS1="${_c_user}\u${_c_reset}@${_c_host}\h${_c_reset} ${_wsl_segment}${_pyenv_segment}${_c_blue}\w${_c_reset}\$ "
 
-# Append git info (kept separate so it never breaks the base prompt)
+# Append git info
 PS1+='$( _git_branch ) '
 
 export PS1

@@ -1,4 +1,4 @@
-# --- common dotfiles ---
+w# --- common dotfiles ---
 [ -f ~/.aliases ]   && . ~/.aliases
 [ -f ~/.exports ]   && . ~/.exports
 [ -f ~/.functions ] && . ~/.functions
@@ -66,6 +66,5 @@ alias google-chrome='google-chrome-stable --ozone-platform-hint=auto --enable-fe
 # [ -f ~/.bashrc ] && . ~/.bashrc
 
 
-export PATH="/home/rc/.pixi/bin:$PATH"
-export GPG_TTY="$(tty)"
-export GPG_TTY=/dev/pts/0
+export GPG_TTY=$(tty)
+export GPG_TTY=/dev/pts/1

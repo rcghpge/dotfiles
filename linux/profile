@@ -1,5 +1,7 @@
 if [ -f ~/.bash_profile ]; then
     source ~/.bash_profile
 fi
-export GPG_TTY="$(tty)"
-export GPG_TTY=/dev/pts/0
+export VSCODE_TELEMETRY_ENABLED=false
+export VSCODE_DISABLE_TELEMETRY=1
+export VSCODE_TELEMETRY_ENABLED=false
+export VSCODE_DISABLE_TELEMETRY=1

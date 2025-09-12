@@ -30,10 +30,10 @@ bash install.sh
 After installation, you can run the environment cleanup script to free up disk space from common development caches in cached memory:
 ```bash
 # Be sure to set permissions if needed (chmod +x)
-bash bash_env_clean.sh
+bash bash-env-clean.sh
 
 # With permissions set
-./bash_env_clean.sh
+./bash-env-clean.sh
 ```
 
 This will:

@@ -6,6 +6,17 @@ echo "🔍 Initial disk usage in /home/$USER"
 du -h --max-depth=1 ~ | sort -hr | head -n 15
 echo ""
 
+# Anaconda/Conda
+if [ -d "$HOME/anaconda3" ] && command -v conda >/dev/null 2>&1; then
+  echo "🧹 Cleaning up Anaconda/Conda cache..."
+  before=$(du -sh "$HOME/anaconda3" | cut -f1)
+  conda clean --all --yes
+  after=$(du -sh "$HOME/anaconda3" | cut -f1)
+  echo "✅ Conda cache cleaned: $before → $after"
+else
+  echo "⚠️  No Anaconda3 directory or conda command not found. Skipping..."
+fi
+
 # Hugging Face
 if [ -d "$HOME/.cache/huggingface" ]; then
   echo "🧹 Deleting Hugging Face cache..."
@@ -24,7 +35,7 @@ if [ -d "$HOME/.cache/kagglehub" ]; then
   rm -rf "$HOME/.cache/kagglehub"
 fi
 
-# Pip cache
+# Pip
 if [ -d "$HOME/.cache/pip" ]; then
   echo "🧹 Deleting pip cache..."
   rm -rf "$HOME/.cache/pip"
@@ -34,6 +45,7 @@ fi
 echo "🧹 Removing __pycache__ and Jupyter checkpoints..."
 find "$HOME" -type d -name "__pycache__" -exec rm -rf {} +
 find "$HOME" -type d -name ".ipynb_checkpoints" -exec rm -rf {} +
+
 
 echo ""
 echo "✅ Cleanup complete."

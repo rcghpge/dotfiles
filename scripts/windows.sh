@@ -23,7 +23,7 @@ if [[ "$DISTRO_ID" == "ubuntu" || "$DISTRO_ID" == "debian" ]]; then
   echo "📦 Installing base packages for Debian/Ubuntu..."
   sudo apt-get install -y \
     git tree curl emacs neovim build-essential \
-    python3 python3-pip python3-venv \
+    python3 python3-pip python3-venv python-is-python3 \
     wslu xdg-utils shellcheck speedtest-cli \
     fonts-terminus fastfetch || true   # Terminus font + Fastfetch (Linux side)
 

@@ -25,7 +25,7 @@ git clone https://github.com/yourusername/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 bash install.sh
 ```
-##  Clean up with `bash_env_clean.sh`
+##  Clean up with `bash-env-clean.sh`
 
 After installation, you can run the environment cleanup script to free up disk space from common development caches in cached memory:
 ```bash

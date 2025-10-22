@@ -72,7 +72,6 @@ alias google-chrome='google-chrome-stable --ozone-platform-hint=auto --enable-fe
 
 
 export GPG_TTY=$(tty)
-<<<<<<< HEAD
 export GPG_TTY=/dev/pts/1
 export PATH="/home/rc/.pixi/bin:$PATH"
 export GPG_TTY="$(tty)"
@@ -101,7 +100,6 @@ else
         . "/usr/etc/profile.d/conda.sh"
     else
         export PATH="/usr/bin:$PATH"
->>>>>>> b88d08b (wallpapers)
     fi
 fi
 unset __conda_setup

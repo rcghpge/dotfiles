@@ -88,7 +88,6 @@ else
         . "/home/rc/anaconda3/etc/profile.d/conda.sh"
     else
         export PATH="/home/rc/anaconda3/bin:$PATH"
-=======
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!

@@ -33,7 +33,7 @@ param (
     [switch]$noBackup
 )
 
-$logFile = "optimize-wsl-vhd.log"
+$logFile = "../logs/optimize-wsl-vhd.log"
 Start-Transcript -Path $logFile -Append
 
 Write-Output "`n[INFO] Scanning known locations for ext4.vhdx files..."
@@ -95,7 +95,7 @@ if (-not $noBackup.IsPresent) {
     Write-Output "`n[INFO] Creating backup: $backupPath"
     Copy-Item -Path $fullPath -Destination $backupPath -Force
 } else {
-    Write-Warning "[WARN] Skipping backup (you used -noBackup or -nb)"
+    Write-Warning "[WARN] Skipping backup (You selected -noBackup or -nb)"
 }
 
 Write-Output "`n[INFO] Optimizing with Optimize-VHD..."

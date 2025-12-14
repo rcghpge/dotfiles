@@ -60,6 +60,7 @@ dev/
 # Logs or other miscellaneous
 #---------------------------------------------------
 *.log
+logs/
 
 #---------------------------------------------------
 # VSCode or other editor-specific settings (optional)

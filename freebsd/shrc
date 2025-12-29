@@ -93,3 +93,7 @@ fi
 # Keyboard settings
 stty erase ^H
 set -o vi
+
+# Text Editors
+alias gvim='env GDK_SCALE=2 GDK_DPI_SCALE=2 gvim'
+alias emacs='GDK_SCALE=2 emacs'

@@ -3,7 +3,7 @@
 [![Shell Lint](https://github.com/rcghpge/dotfiles/actions/workflows/lint.yml/badge.svg)](https://github.com/rcghpge/dotfiles/actions/workflows/lint.yml)
 
 <p align="center">
-  <img src="https://github.com/rcghpge/dotfiles/blob/main/assets/dotfiles.png?raw=true" width="50%" alt="p">
+  <img src="https://github.com/rcghpge/dotfiles/blob/main/assets/dotfiles.png?raw=true" width="100%" alt="p">
 </p>
 
 This repository contains unified dotfiles for:
@@ -27,7 +27,7 @@ git clone https://github.com/yourusername/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 bash install.sh
 ```
-##  Clean up with `bash-env-clean.sh`
+##  Clean up with `bash_clean.sh`
 
 After installation, you can run the environment cleanup script to free up disk space from common development caches in cached memory:
 ```bash

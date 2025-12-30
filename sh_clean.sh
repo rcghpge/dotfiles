@@ -3,7 +3,7 @@
 # Pixi, pip, KaggleHub) and orphaned Python/Jupyter files from $HOME.
 
 echo "🔍 Initial disk usage in /home/$USER"
-du -h --max-depth=1 ~ | sort -hr | head -n 15
+du -h -d 1 ~ | sort -hr | head -n 15
 echo ""
 
 # Anaconda/Conda
@@ -14,7 +14,7 @@ if [ -d "$HOME/anaconda3" ] && command -v conda >/dev/null 2>&1; then
   after=$(du -sh "$HOME/anaconda3" | cut -f1)
   echo "✅ Conda cache cleaned: $before → $after"
 else
-  echo "⚠️  No Anaconda3 directory or conda command not found. Skipping..."
+  echo "⚠️ No Anaconda3 directory or conda command not found. Skipping..."
 fi
 
 # Hugging Face
@@ -53,5 +53,5 @@ echo ""
 
 # Post-clean disk check
 echo "📦 Final disk usage in /home/$USER"
-du -h --max-depth=1 ~ | sort -hr | head -n 15
+du -h -d 1 ~ | sort -hr | head -n 15
 

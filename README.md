@@ -8,7 +8,7 @@
 
 This repository contains unified dotfiles for:
 
-- Windows 10/11 (Bash: Git Bash, WSL, PowerShell)
+- Windows 10/11 Pro (Bash: Git Bash, WSL, PowerShell)
 - FreeBSD (bash and sh)
 - Linux distributions (bash and sh)
 
@@ -32,10 +32,10 @@ bash install.sh
 After installation, you can run the environment cleanup script to free up disk space from common development caches in cached memory:
 ```bash
 # Be sure to set permissions if needed (chmod +x)
-bash bash-env-clean.sh
+bash bash_clean.sh
 
 # With permissions set
-./bash-env-clean.sh
+./bash_clean.sh
 ```
 
 This will:

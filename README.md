@@ -3,7 +3,7 @@
 [![Shell Lint](https://github.com/rcghpge/dotfiles/actions/workflows/lint.yml/badge.svg)](https://github.com/rcghpge/dotfiles/actions/workflows/lint.yml)
 
 <p align="center">
-  <img src="https://github.com/rcghpge/dotfiles/blob/main/src/assets/dotfiles.png?raw=true" width="50%" alt="p">
+  <img src="https://github.com/rcghpge/dotfiles/blob/main/assets/dotfiles.png?raw=true" width="50%" alt="p">
 </p>
 
 This repository contains unified dotfiles for:

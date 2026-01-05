@@ -48,8 +48,8 @@ Show top disk usage in your home directory and delete common cache directories i
 
 Output looks like:
 ```bash
-🔍 Initial disk usage in /home/yourname
-2.1G    /home/yourname/.cache
+🔍 Initial disk usage in /home/username
+2.1G    /home/username/.cache
 ...
 
 🧹 Deleting Hugging Face cache...

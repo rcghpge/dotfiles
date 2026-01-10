@@ -1,8 +1,13 @@
-#!/bin/bash
-# This bash script cleans cached memory on your machine (Hugging Face,
+#!/bin/sh
+# This shell script cleans cached memory on your machine (Hugging Face,
 # Pixi, pip, KaggleHub) and orphaned Python/Jupyter files from $HOME.
 
+
+echo "============================================================"
+echo "🖥️  Bourne Shell disk cleanup running..."
+echo "============================================================"
 echo "🔍 Initial disk usage in /home/$USER"
+echo "------------------------------------------------------------"
 du -h -d 1 ~ | sort -hr | head -n 15
 echo ""
 
@@ -48,10 +53,12 @@ find "$HOME" -type d -name ".ipynb_checkpoints" -exec rm -rf {} +
 
 
 echo ""
+echo "============================================================"
 echo "✅ Cleanup complete."
-echo ""
+echo "============================================================"
 
 # Post-clean disk check
 echo "📦 Final disk usage in /home/$USER"
+echo "------------------------------------------------------------"
 du -h -d 1 ~ | sort -hr | head -n 15
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# This script runs shellcheck on all shell scripts in your dotfiles directory.
+# This Bash script runs shellcheck for shell linting on all shell scripts in your dotfiles directory.
 
 set -euo pipefail
 

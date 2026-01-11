@@ -2,7 +2,11 @@
 # This bash script cleans cached memory on your machine (Hugging Face,
 # Pixi, pip, KaggleHub) and orphaned Python/Jupyter files from $HOME.
 
+echo "============================================================"
+echo "🖥️  Boash Shell disk cleanup running..."
+echo "============================================================"
 echo "🔍 Initial disk usage in /home/$USER"
+echo "------------------------------------------------------------"
 du -h --max-depth=1 ~ | sort -hr | head -n 15
 echo ""
 
@@ -42,6 +46,7 @@ if [ -d "$HOME/.cache/pip" ]; then
 fi
 
 # __pycache__ and .ipynb_checkpoints across home
+echo ""
 echo "🧹 Removing __pycache__ and Jupyter checkpoints..."
 find "$HOME" -type d -name "__pycache__" -exec rm -rf {} +
 find "$HOME" -type d -name ".ipynb_checkpoints" -exec rm -rf {} +
@@ -50,10 +55,10 @@ find "$HOME" -type d -name ".ipynb_checkpoints" -exec rm -rf {} +
 if [ -d "$HOME/.cache" ]; then
   echo "🧹 Cleaning up ~/.cache directory..."
   before=$(du -sh "$HOME/.cache" | cut -f1)
-  
+
   # Removes all files/folders inside ~/.cache without deleting the directory itself
   find "$HOME/.cache" -mindepth 1 -delete
-  
+
   after=$(du -sh "$HOME/.cache" 2>/dev/null | cut -f1)
   echo "✅ Cache cleaned: $before → ${after:-0B}"
   echo "✅ Cleanup complete."
@@ -65,5 +70,6 @@ fi
 # Post-clean disk check
 printf "\n"
 echo "📦 Final disk usage in /home/$USER"
+echo "------------------------------------------------------------"
 du -h --max-depth=1 ~ | sort -hr | head -n 15
 

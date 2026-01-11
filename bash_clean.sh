@@ -3,7 +3,7 @@
 # Pixi, pip, KaggleHub) and orphaned Python/Jupyter files from $HOME.
 
 echo "============================================================"
-echo "🖥️  Boash Shell disk cleanup running..."
+echo "🖥️  Bosh Shell disk cleanup running..."
 echo "============================================================"
 echo "🔍 Initial disk usage in /home/$USER"
 echo "------------------------------------------------------------"

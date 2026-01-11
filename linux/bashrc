@@ -70,7 +70,7 @@ alias google-chrome='google-chrome-stable --ozone-platform-hint=auto --enable-fe
 # (Put this in ~/.bash_profile once; harmless if repeated)
 # [ -f ~/.bashrc ] && . ~/.bashrc
 
-
+export TERMINFO=/usr/share/xterm-256color
 export GPG_TTY=$(tty)
 export GPG_TTY=/dev/pts/1
 export PATH="/home/rc/.pixi/bin:$PATH"

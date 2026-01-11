@@ -10,12 +10,12 @@ foreach ($line in $lines) {
 }
 
 foreach ($distroName in $distros) {
-    Write-Host "--- Updating $distroName ---"
+    Write-Output "--- Updating $distroName ---"
 
     # Test by trying a harmless command, capture output
     $testOutput = wsl -d "$distroName" -e bash -c "echo OK" 2>&1
     if ($LASTEXITCODE -ne 0 -or $testOutput -notmatch "OK") {
-        Write-Host "Invalid/not running: $distroName"
+        Write-Output "Invalid/not running: $distroName"
         continue
     }
 
@@ -29,7 +29,7 @@ foreach ($distroName in $distros) {
         else echo 'Unsupported'; fi
     " 2>&1 | ForEach-Object { if ($_ -notmatch '^Hit:|^Ign:|^Get:|^Need|^Reading|^Building|^0 upgraded|^No') { $_ } }
 
-    Write-Host "Done: $distroName`n"
+    Write-Output "Done: $distroName`n"
 }
-Write-Host "--- Complete ---"
+Write-Output "--- Complete ---"
 

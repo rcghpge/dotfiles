@@ -6,57 +6,13 @@
   <img src="https://github.com/rcghpge/dotfiles/blob/main/assets/dotfiles.png?raw=true" width="100%" alt="p">
 </p>
 
-This repository contains unified dotfiles for:
+This repository contains dotfiles for:
 
-- Windows 10/11 Pro (Bash: Git Bash, WSL, PowerShell)
-- FreeBSD (bash and sh)
-- Linux distributions (bash and sh)
+- FreeBSD 
+- Linux 
+- Windows
 
-## Structure
-
-- `common/`: Shared configurations (aliases, exports, functions).
-- `windows/`: Windows-specific dotfiles.
-- `freebsd/`: FreeBSD-specific dotfiles.
-- `linux/`: Linux-specific dotfiles.
-- `scripts/`: Setup, installation, and utility scripts.
-
-## Install
-
-```bash
-git clone https://github.com/yourusername/dotfiles.git ~/dotfiles
-cd ~/dotfiles
-bash install.sh
-```
-##  Clean up with `bash_clean.sh`
-
-After installation, you can run the environment cleanup script to free up disk space from common development caches in cached memory:
-```bash
-# Be sure to set permissions if needed (chmod +x)
-bash bash_clean.sh
-
-# With permissions set
-./bash_clean.sh
-```
-
-This will:
-
-Show top disk usage in your home directory and delete common cache directories if they exist:
-- `~/.cache/huggingface`
-- `~/.cache/rattler`
-- `~/.cache/kagglehub`
-- `~/.cache/pip`
-
-Output looks like:
-```bash
-🔍 Initial disk usage in /home/username
-2.1G    /home/username/.cache
-...
-
-🧹 Deleting Hugging Face cache...
-🧹 Deleting Rattler (Pixi) cache...
-🧹 Deleting pip cache...
-```
-No root access needed. Run it anytime to keep your environment lean and clean.
+---
 
 ## License
 

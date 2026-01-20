@@ -4,6 +4,10 @@
 [ -f ~/.functions ] && . ~/.functions
 
 
+# Default $EDITOR
+export EDITOR='nano'
+export VISUAL='nano'
+
 # Ensure PS1 is defined for non-interactive shells
 : "${PS1:=}"
 export PS1
@@ -60,11 +64,9 @@ PS1+='$( _git_branch ) '
 
 export PS1
 
-# Linux cofigs
-# LnOS (Arch Linux)
-# Web browsers
+# Linux (LnOS - Arch Linux-based)
 alias google-chrome='google-chrome-stable --ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations --force-device-scale-factor=1.5 & disown'
-
+alias kde='sudo systemctl start sddm'
 
 # Config for login shells - sources this file 
 # (Put this in ~/.bash_profile once; harmless if repeated)
@@ -90,8 +92,6 @@ else
         export PATH="/home/rc/anaconda3/bin:$PATH"
     fi
 fi
-
-
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

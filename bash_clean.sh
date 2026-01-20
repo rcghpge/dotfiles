@@ -19,6 +19,7 @@ if [ -d "$HOME/anaconda3" ] && command -v conda >/dev/null 2>&1; then
   echo "✅ Conda cache cleaned: $before → $after"
 else
   echo "⚠️ No Anaconda3 directory or conda command not found. Skipping..."
+  echo "------------------------------------------------------------"
 fi
 
 # Hugging Face

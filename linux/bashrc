@@ -64,13 +64,17 @@ PS1+='$( _git_branch ) '
 
 export PS1
 
-# Linux (LnOS - Arch Linux-based)
+# Linux cofigs
+# Web browsers
 alias google-chrome='google-chrome-stable --ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations --force-device-scale-factor=1.5 & disown'
 alias kde='sudo systemctl start sddm'
 
 # Config for login shells - sources this file 
 # (Put this in ~/.bash_profile once; harmless if repeated)
 # [ -f ~/.bashrc ] && . ~/.bashrc
+
+alias clear='printf "\\033[2J\\033[;H"'
+alias bat='batcat'
 
 export TERMINFO=/usr/share/xterm-256color
 export GPG_TTY=$(tty)

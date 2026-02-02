@@ -8,14 +8,14 @@
 export EDITOR='nano'
 export VISUAL='nano'
 
-# Ensure PS1 is defined for non-interactive shells
+# Check PS1 is defined for non-interactive shells
 : "${PS1:=}"
 export PS1
 
-# Only set a fancy prompt for interactive shells
+# Only set a prompt for interactive shells
 [[ $- != *i* ]] && return
 
-# Detect WSL
+# WSL
 _is_wsl=false
 if grep -qi microsoft /proc/version 2>/dev/null || [[ -n $WSL_DISTRO_NAME ]]; then
   _is_wsl=true
@@ -42,7 +42,7 @@ if (( EUID == 0 )); then _c_user=$_c_red; else _c_user=$_c_green; fi
 # Host color: different on SSH to hint you're remote
 if [[ -n $SSH_TTY ]]; then _c_host=$_c_red; else _c_host=$_c_cyan; fi
 
-# Optional: tiny git branch helper (no dependency on __git_ps1)
+# Optional: git branch helper (no dependency on __git_ps1)
 _git_branch() {
   local b
   b="$(git symbolic-ref --quiet --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null)"
@@ -52,30 +52,26 @@ _git_branch() {
 # Optional: virtualenv name
 _pyenv_segment='${VIRTUAL_ENV:+($(basename "$VIRTUAL_ENV")) }'
 
-# Optional: WSL badge
-_wsl_segment=''
-$_is_wsl && _wsl_segment='[WSL] '
 
-# Build PS1 
-PS1="${_c_user}\u${_c_reset}@${_c_host}\h${_c_reset} ${_wsl_segment}${_pyenv_segment}${_c_blue}\w${_c_reset}\$ "
+# Build PS1
+PS1="${_c_user}\u${_c_reset}@${_c_host}\h${_c_reset} ${_pyenv_segment}${_c_blue}\w${_c_reset}\$ " 
+
 
 # Append git info
 PS1+='$( _git_branch ) '
-
 export PS1
 
-# Linux cofigs
-# Web browsers
+
+# Alias
 alias google-chrome='google-chrome-stable --ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations --force-device-scale-factor=1.5 & disown'
 alias kde='sudo systemctl start sddm'
+alias bat='batcat'
+alias clear='printf "\\033[2J\\033[;H"'
 
-# Config for login shells - sources this file 
-# (Put this in ~/.bash_profile once; harmless if repeated)
+# Config for login shells - sources this file
 # [ -f ~/.bashrc ] && . ~/.bashrc
 
-alias clear='printf "\\033[2J\\033[;H"'
-alias bat='batcat'
-
+# Source paths
 export TERMINFO=/usr/share/xterm-256color
 export GPG_TTY=$(tty)
 export GPG_TTY=/dev/pts/1
@@ -83,9 +79,10 @@ export PATH="/home/rc/.pixi/bin:$PATH"
 export GPG_TTY="$(tty)"
 export GPG_TTY=/dev/pts/0
 export PATH="$HOME/.local/bin:$PATH"
+export PATH=$PATH:~/go/bin
+export ENABLE_MOJO_STACK_TRACE_ON_ERROR=1
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
+# Conda init
 __conda_setup="$('/home/rc/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
@@ -101,4 +98,3 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-export ENABLE_MOJO_STACK_TRACE_ON_ERROR=1

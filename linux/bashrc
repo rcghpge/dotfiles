@@ -1,4 +1,4 @@
-# --- common dotfiles ---
+# Dotfile configs
 [ -f ~/.aliases ]   && . ~/.aliases
 [ -f ~/.exports ]   && . ~/.exports
 [ -f ~/.functions ] && . ~/.functions
@@ -72,6 +72,8 @@ alias clear='printf "\\033[2J\\033[;H"'
 # [ -f ~/.bashrc ] && . ~/.bashrc
 
 # Source paths
+export MPLBACKEND=Agg
+export MATPLOTLIBRC=~/.config/matplotlib
 export TERMINFO=/usr/share/xterm-256color
 export GPG_TTY=$(tty)
 export GPG_TTY=/dev/pts/1

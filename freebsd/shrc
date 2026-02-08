@@ -1,99 +1,72 @@
-# ~/.shrc — portable, colorized, and safe
+#
+# .shrc - bourne shell startup file 
+#
+# This file will be used if the shell is invoked for interactive use and
+# the environment variable ENV is set to this file.
+#
+# see also sh(1), environ(7).
+#
 
-# --- Load user dotfiles if present ---
-[ -f "$HOME/.aliases" ]   && . "$HOME/.aliases"
-[ -f "$HOME/.exports" ]   && . "$HOME/.exports"
-[ -f "$HOME/.functions" ] && . "$HOME/.functions"
 
-# --- Only run in interactive shells ---
-case $- in *i*) ;; *) return ;; esac
+# file permissions: rwxr-xr-x
+#
+# umask 022
 
-# --- Colors via tput when available (portable) ---
-if command -v tput >/dev/null 2>&1 && tput setaf 0 >/dev/null 2>&1; then
-  _c_reset="$(tput sgr0)"
-  _c_bold="$(tput bold)"
-  _c_red="$(tput setaf 1)"
-  _c_grn="$(tput setaf 2)"
-  _c_cyn="$(tput setaf 6)"
-  _c_blu="$(tput setaf 4)"
-else
-  _c_reset="$(printf '\033[0m')"
-  _c_bold="$(printf '\033[1m')"
-  _c_red="$(printf '\033[31m')"
-  _c_grn="$(printf '\033[32m')"
-  _c_cyn="$(printf '\033[36m')"
-  _c_blu="$(printf '\033[34m')"
-fi
+# Uncomment this to enable the builtin vi(1) command line editor in sh(1),
+# e.g. ESC to go into visual mode.
+# set -o vi
 
-# --- POSIX /bin/sh prompt (colored if tput works) ---
-PS1='\u@\h:\w\$ '  # plain fallback
-# Upgrade to color on any POSIX shell (e.g., FreeBSD /bin/sh)
-PS1="${_c_grn}\u${_c_reset}@${_c_cyn}\h${_c_reset}:${_c_blu}\w${_c_reset}\$ "
-export PS1
+# KDE Plasma Desktop
+alias driver='sudo kldload i915kms'
+alias kde='. ~/.xinitrc'
 
-# --- Portable aliases (GNU/BSD aware) ---
-# ls: prefer GNU --color, else BSD -G
-if ls --color=auto -d . >/dev/null 2>&1; then
-  alias ls='ls --color=auto -F'
-  alias ll='ls -alF --color=auto'
-  alias la='ls -A --color=auto'
-else
-  alias ls='ls -GF'
-  alias ll='ls -alGF'
-  alias la='ls -AGF'
-fi
+# Virtual Machines
+alias vm_drivers='sudo kldload pf nmdm vmm if_tap if_bridge'
+alias vm_net='sudo virsh net-start default'
+alias vm='sudo GDK_DPI_SCALE=2.5 virt-manager'
 
-# grep colors (works on GNU & BSD grep)
-alias grep='grep --color=auto'
-alias egrep='egrep --color=auto'
-alias fgrep='fgrep --color=auto'
+# Rust
+export CARGO_TARGET_DIR=/tmp/cargo-installR81R31
 
-# Pager defaults
-export LESS='-R -M -i'
-export LESSHISTFILE=-
-export PAGER=less
+# Python
+export PATH="/home/rc/.local/bin:$PATH"
 
-# LS_COLORS if dircolors exists (noop on BSD)
-if command -v dircolors >/dev/null 2>&1; then
-  if [ -f "$HOME/.dircolors" ]; then
-    eval "$(dircolors -b "$HOME/.dircolors" 2>/dev/null || true)"
-  else
-    eval "$(dircolors -b 2>/dev/null || true)"
-  fi
-fi
-
-# --- GPG pinentry: bind to current tty when available ---
-if tty_out="$(tty 2>/dev/null)"; then
-  export GPG_TTY="$tty_out"
-fi
-
-# --- Bash/Zsh ---
-if [ -n "$BASH_VERSION" ] || [ -n "$ZSH_VERSION" ]; then
-  _git_branch() {
-    command -v git >/dev/null 2>&1 || return
-    b="$(git symbolic-ref --quiet --short HEAD 2>/dev/null || \
-        git describe --tags --exact-match 2>/dev/null)"
-    [ -n "$b" ] && printf ' (%s)' "$b"
-  }
-
-  # Bash
-  if [ -n "$BASH_VERSION" ]; then
-    PS1="\[${_c_grn}\]\u\[${_c_reset}\]@\[${_c_cyn}\]\h\[${_c_reset}\]:\[${_c_blu}\]\w\[${_c_reset}\]"'$( _git_branch )\$ '
-    export PS1
-  fi
-
-  # Zsh equivalent
-  if [ -n "$ZSH_VERSION" ]; then
-    setopt PROMPT_SUBST
-    PS1="%F{green}%n%f@%F{cyan}%m%f:%F{blue}%~%f$ "='$(_git_branch)''$ '
-    export PS1
-  fi
-fi
-
-# Keyboard settings
-stty erase ^H
-set -o vi
-
-# Text Editors
+# Aliases
+alias h='fc -l'
+alias j=jobs
+alias m="$PAGER"
+alias ll='ls -laFoG'
+alias l='ls -lG'
+alias ls='ls -G' 
+alias g='egrep -i'
 alias gvim='env GDK_SCALE=2 GDK_DPI_SCALE=2 gvim'
-alias emacs='GDK_SCALE=2 emacs'
+alias emacs='GDK_SCALE=2 emacs' 
+
+# Extra aliases
+# alias cp='cp -ip'
+# alias mv='mv -i'
+# alias rm='rm -i'
+
+# # csh like history on arrow up and down
+bind ^[[A ed-search-prev-history
+bind ^[[B ed-search-next-history
+
+# # Ctrl+right arrow: go to the next word
+# # Ctrl+left arrow: go to the previous word
+bind "\\e[1;5C" em-next-word
+bind "\\e[1;5D" ed-prev-word
+
+alias history='fc -l'
+
+# Fix home/del for mobaxterm
+bind ^[[5~ ed-move-to-beg
+bind ^[[6~ ed-move-to-end
+
+# Set terminal prompt: ``username@hostname:directory $ '' 
+PS1="\[\e[1;32m\]\u\[\e[32m\]@\h \[\e[34m\]\w \[\e[0m\]\$ "
+
+# search path for cd(1)
+# CDPATH=:$HOME
+
+# File paths
+export PATH=$PATH:/usr/libexec

@@ -8,7 +8,7 @@
 
 This repository contains dotfiles for:
 
-- BSD 
+- FreeBSD 
 - Linux 
 - Windows
 

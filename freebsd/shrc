@@ -10,11 +10,13 @@
 
 # file permissions: rwxr-xr-x
 #
-# umask 022
+# umask	022
 
 # Uncomment this to enable the builtin vi(1) command line editor in sh(1),
 # e.g. ESC to go into visual mode.
 # set -o vi
+
+# Podman
 
 # KDE Plasma Desktop
 alias driver='sudo kldload i915kms'
@@ -41,6 +43,7 @@ alias ls='ls -G'
 alias g='egrep -i'
 alias gvim='env GDK_SCALE=2 GDK_DPI_SCALE=2 gvim'
 alias emacs='GDK_SCALE=2 emacs' 
+alias portgraph='/usr/local/bin/portgraph'
 
 # Extra aliases
 # alias cp='cp -ip'
@@ -63,7 +66,7 @@ bind ^[[5~ ed-move-to-beg
 bind ^[[6~ ed-move-to-end
 
 # Set terminal prompt: ``username@hostname:directory $ '' 
-PS1="\[\e[1;32m\]\u\[\e[32m\]@\h \[\e[34m\]\w \[\e[0m\]\$ "
+PS1="\[\e[1;32m\]\u\[\e[32m\]@\h:\[\e[34m\]\w \[\e[0m\]\$ "
 
 # search path for cd(1)
 # CDPATH=:$HOME

@@ -8,4 +8,4 @@ esac
 # Basic env
 PATH="$HOME/bin:$HOME/.local/bin:$PATH"; export PATH
 umask 022
-: "${EDITOR:=vi}"; export EDITOR
+: "${EDITOR:=nano}"; export EDITOR

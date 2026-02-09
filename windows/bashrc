@@ -7,6 +7,10 @@ alias google-chrome="/mnt/c/Program\\ Files/Google/Chrome/Application/chrome.exe
 
 export PS1="\[\e[1;32m\]\u@\h\[\e[0m\]:\[\e[1;34m\]\w\[\e[0m\] \$ "
 export PATH="$HOME/.local/bin:$PATH"
+<<<<<<< Updated upstream
 export PATH="/home/rc/.pixi/bin:$PATH"
 
 export GPG_TTY=$(tty)
+=======
+alias gemini="gemini-cli"
+>>>>>>> Stashed changes

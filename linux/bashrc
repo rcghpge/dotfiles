@@ -1,7 +1,7 @@
 # Dotfile configs
-[ -f ~/.aliases ]   && . ~/.aliases
-[ -f ~/.exports ]   && . ~/.exports
-[ -f ~/.functions ] && . ~/.functions
+[[ -f ~/.aliases ]]  && . ~/.aliases
+[[ -f ~/.exports ]]   && . ~/.exports
+[[ -f ~/.functions ]] && . ~/.functions
 
 
 # Default $EDITOR
@@ -73,7 +73,7 @@ alias bat='batcat'
 alias clear='printf "\\033[2J\\033[;H"'
 
 # Config for login shells - sources this file
-# [ -f ~/.bashrc ] && . ~/.bashrc
+#[ -f ~/.bashrc ] && . ~/.bashrc
 
 # Source paths
 export MPLBACKEND=Agg
@@ -101,6 +101,5 @@ else
 fi
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 

@@ -56,7 +56,6 @@ _git_branch() {
 # Optional: virtualenv name
 _pyenv_segment='${VIRTUAL_ENV:+($(basename "$VIRTUAL_ENV")) }'
 
-
 # Build PS1
 PS1="${_c_user}\u@${_c_reset}${_c_host}\h:${_c_reset}${_pyenv_segment}${_c_blue}\w${_c_reset}"
 
@@ -78,7 +77,7 @@ alias clear='printf "\\033[2J\\033[;H"'
 # Source paths
 export MPLBACKEND=Agg
 export MATPLOTLIBRC=~/.config/matplotlib
-export TERMINFO=/usr/share/xterm-256color
+export TERMINFO=/usr/share/terminfo
 export GPG_TTY=$(tty)
 export GPG_TTY=/dev/pts/1
 export PATH="$HOME/.pixi/bin:$PATH"

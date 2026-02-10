@@ -44,7 +44,7 @@ fi
 if (( EUID == 0 )); then _c_user=$_c_red; else _c_user=$_c_green; fi
 
 # Host color: different on SSH to hint you're remote
-if [[ -n $SSH_TTY ]]; then _c_host=$_c_red; else _c_host=$_c_cyan; fi
+if [[ -n $SSH_TTY ]]; then _c_host=$_c_red; else _c_host=$_c_green; fi
 
 # Optional: git branch helper (no dependency on __git_ps1)
 _git_branch() {
@@ -58,16 +58,16 @@ _pyenv_segment='${VIRTUAL_ENV:+($(basename "$VIRTUAL_ENV")) }'
 
 
 # Build PS1
-PS1="${_c_user}\u${_c_reset}@${_c_host}\h${_c_reset} ${_pyenv_segment}${_c_blue}\w${_c_reset}\$ " 
-
+PS1="${_c_user}\u@${_c_reset}${_c_host}\h:${_c_reset}${_pyenv_segment}${_c_blue}\w${_c_reset}"
 
 # Append git info
-PS1+='$( _git_branch ) '
+PS1+='$(_git_branch)'
+PS1+=' \$ '
 export PS1
 
 # Aliases
-# alias google-chrome='google-chrome-stable --ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations --force-device-scale-factor=1.5 & disown'
 alias update='sudo pacman -Syu'
+alias google-chrome='google-chrome-stable --ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations --force-device-scale-factor=1.5 & disown'
 alias kde='sudo systemctl start sddm'
 alias bat='batcat'
 alias clear='printf "\\033[2J\\033[;H"'

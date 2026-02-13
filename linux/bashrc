@@ -75,6 +75,7 @@ alias clear='printf "\\033[2J\\033[;H"'
 #[ -f ~/.bashrc ] && . ~/.bashrc
 
 # Source paths
+export PATH="$HOME/bin:$PATH"
 export MPLBACKEND=Agg
 export MATPLOTLIBRC=~/.config/matplotlib
 export TERMINFO=/usr/share/terminfo

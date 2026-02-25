@@ -61,7 +61,7 @@ PS1="${_c_user}\u@${_c_reset}${_c_host}\h:${_c_reset}${_pyenv_segment}${_c_blue}
 
 # Append git info
 PS1+='$(_git_branch)'
-PS1+=' \$ '
+PS1+=' # '
 export PS1
 
 # Aliases

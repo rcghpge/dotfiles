@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-]set -Eeuo pipefail
+set -Eeuo pipefail
 
 ROOT_DIR="${PWD}"
 DRY_RUN=1
@@ -140,7 +140,7 @@ clean_local_caches() {
 }
 
 clean_python_junk() {
-  echo "🧹 Cleaning Python/Jupyter junk..."
+  echo "🧹 Cleaning Python/Jupyter residual builds..."
 
   while IFS= read -r -d '' path; do
     delete_path "$path"
@@ -169,8 +169,6 @@ report_large_files() {
 }
 
 delete_large_files() {
-  local threshold_bytes=$((LARGE_SIZE_MB * 1024 * 1024))
-
   echo "🧹 Handling files larger than ${LARGE_SIZE_MB}MB..."
   while IFS=$'\t' read -r size path; do
     [ -n "${path:-}" ] || continue

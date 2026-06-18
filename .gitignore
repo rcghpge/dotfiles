@@ -69,3 +69,7 @@ logs/
 .idea/
 *.code-workspace
 
+#---------------------------------------------------
+# Local builds and artifacts
+#---------------------------------------------------
+scripts/security/

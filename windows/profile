@@ -1,3 +1,8 @@
-if [ -f ~/.bash_profile ]; then
-    source ~/.bash_profile
+# PowerShell and cmd configs
+if command -v pwsh >/dev/null 2>&1; then
+    pwsh -NoProfile -c "Set-Content $PROFILE.CurrentUserCurrentHost 'function prompt { \"admin@at:~ # \" }'" >/dev/null 2>&1
 fi
+if command -v powershell.exe >/dev/null 2>&1; then
+    powershell.exe -NoProfile -Command "reg add 'HKCU\\Software\\Microsoft\\Command Processor' /v AutoRun /t REG_SZ /d 'prompt at@cmd:~ #' /f" >nul 2>&1
+fi
+

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Update Local Debian Environment
-# This Bash script will update your local Debian computing environment
+# Update Local ParrotOS Environment
+# This Bash script will update your local ParrotOS computing environment
 
 set -euox
 

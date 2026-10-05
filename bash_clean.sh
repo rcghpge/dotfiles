@@ -27,7 +27,7 @@ for pixi_dir in "${pixi_dirs[@]}"; do
   find "$pixi_dir/activation-env-v0" -mindepth 1 -delete 2>/dev/null || true
 
   after=$(du -sh "$pixi_dir" 2>/dev/null | cut -f1 || echo "0B")
-  echo "   ✅ $pixi_dir: $before → $after"
+  echo "✅ $pixi_dir: $before → $after"
 done
 
 echo "✅ All .pixi environments cleanup complete."

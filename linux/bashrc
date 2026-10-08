@@ -87,6 +87,8 @@ export GPG_TTY=/dev/pts/0
 export PATH="$HOME/.local/bin:$PATH"
 export PATH=$PATH:~/go/bin
 export ENABLE_MOJO_STACK_TRACE_ON_ERROR=1
+export GDK_SCALE=2
+export _JAVA_OPTIONS="-Dsun.java2d.uiScale=2"
 
 # Conda init
 __conda_setup="$('/home/rc/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"

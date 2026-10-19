@@ -20,9 +20,9 @@
 .LINK
     https://pixi.sh
 .LINK
-    https://github.com/prefix-dev/pixi
+    https://github.com/rcghpge/dotfiles/tools/pixi/install
 .NOTES
-    Version: v0.82.0
+    Version: v0.82.1
 #>
 param (
     [string] $PixiVersion = 'latest',
@@ -33,7 +33,7 @@ param (
 
 Set-StrictMode -Version Latest
 
-function Mask-Credentials {
+function Protect-Credential {
     param(
         [string] $Url
     )
@@ -183,9 +183,9 @@ if ($Env:PIXI_DOWNLOAD_URL) {
 
 $BinDir = Join-Path $PixiHome 'bin'
 
-Write-Host "This script will automatically download and install Pixi ($PixiVersion) for you."
-Write-Host "Getting it from this url: $(Mask-Credentials $DOWNLOAD_URL)"
-Write-Host "The binary will be installed into '$BinDir'"
+Write-Output "This script will automatically download and install Pixi ($PixiVersion) for you."
+Write-Output "Getting it from this url: $(Mask-Credentials $DOWNLOAD_URL)"
+Write-Output "The binary will be installed into '$BinDir'"
 
 $TEMP_FILE = [System.IO.Path]::GetTempFileName()
 $webClient = New-Object System.Net.WebClient
@@ -204,7 +204,7 @@ try {
     # Extract pixi from the downloaded zip file
     Expand-Archive -Path $ZIP_FILE -DestinationPath $BinDir -Force
 } catch {
-    Write-Host "Error: '$(Mask-Credentials $DOWNLOAD_URL)' is not available or failed to download"
+    Write-Output "Error: '$(Protect-Credential $DOWNLOAD_URL)' is not available or failed to download"
     exit 1
 } finally {
     $webClient.Dispose()
@@ -218,13 +218,12 @@ try {
 try {
     $PingOutput = & (Join-Path $BinDir 'pixi.exe') __install-ping 2>$null
     if ($LASTEXITCODE -eq 0 -and $PingOutput) {
-        Write-Host $PingOutput
+        Write-Output $PingOutput
     }
 } catch {
-    # Ignore telemetry errors
+    # Log failure to verbose stream without interrupting installation
+    Write-Verbose "Telemetry ping failed: $_"
 } finally {
-    # Don't leak the ping's exit code (e.g. from older binaries without the
-    # command) to whoever runs this script.
     $global:LASTEXITCODE = 0
 }
 

@@ -3,7 +3,6 @@
 [[ -f ~/.exports ]]   && . ~/.exports
 [[ -f ~/.functions ]] && . ~/.functions
 
-
 # Default $EDITOR
 export EDITOR='nano'
 export VISUAL='nano'
@@ -45,7 +44,7 @@ if (( EUID == 0 )); then _c_user=$_c_red; else _c_user=$_c_green; fi
 # Host color: different on SSH to hint you're remote
 if [[ -n $SSH_TTY ]]; then _c_host=$_c_red; else _c_host=$_c_green; fi
 
-# Git branch helper (Clean snug formatting without extra spaces)
+# Git branch helper
 _git_branch() {
   local b
   b="$(git symbolic-ref --quiet --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null)"
@@ -55,15 +54,15 @@ _git_branch() {
 # Optional: virtualenv name
 _pyenv_segment='${VIRTUAL_ENV:+($(basename "$VIRTUAL_ENV")) }'
 
-# Unified prompt builder that handles Pixi cleanly and snugs everything up
+# Unified prompt builder that handles Pixi cleanly
 _build_prompt() {
     local prefix=""
-    # Check if we're in a pixi environment and build it without trailing spaces
-    if [[ -n "$PIXI_ENVIRONMENT_NAME" ]]; then
+    # Check if we're in a pixi environment, but ignore the "default" environment name
+    if [[ -n "$PIXI_ENVIRONMENT_NAME" && "$PIXI_ENVIRONMENT_NAME" != "default" ]]; then
         prefix="($PIXI_ENVIRONMENT_NAME)"
     fi
 
-    # Print absolute snug layout: (test)rc@windows:~/test(main) # 
+    # Print a snug layout
     # Color spill allows the @ sign to cleanly inherit user colors natively
     printf "%s%s@%s:%s%s%s # " \
         "${prefix}" \
@@ -74,7 +73,7 @@ _build_prompt() {
         "$(_git_branch)"
 }
 
-# Force our prompt builder to run on every single prompt draw loop
+# Build TUI Prompt
 export PROMPT_COMMAND="history -a; history -c; history -r; PS1=\$(_build_prompt)"
 
 # Aliases
@@ -101,7 +100,7 @@ export GDK_SCALE=2
 export _JAVA_OPTIONS="-Dsun.java2d.uiScale=2"
 export PATH="$HOME/.local/share/zig:$PATH"
 
-# Conda init (Fixed with double brackets to block the old unary bug)
+# Conda init
 __conda_setup="$('/home/rc/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 if [[ $? -eq 0 ]]; then
     eval "$__conda_setup"
@@ -113,6 +112,6 @@ else
     fi
 fi
 
-# NVM init (Fixed with double brackets)
+# NVM init
 export NVM_DIR="$HOME/.nvm"
 [[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"

@@ -130,7 +130,7 @@ __wrap__() {
 
     if $HAVE_CURL; then
         CURL_ERR=0
-        HTTP_CODE="$(curl -SL $CURL_OPTIONS "$DOWNLOAD_URL" --output "$TEMP_FILE" --write-out "%{http_code}")" || CURL_ERR=$?
+        HTTP_CODE="$(curl -SL "$CURL_OPTIONS" "$DOWNLOAD_URL" --output "$TEMP_FILE" --write-out "%{http_code}")" || CURL_ERR=$?
         case "$CURL_ERR" in
         35 | 53 | 54 | 59 | 66 | 77)
             if ! $HAVE_WGET; then
@@ -157,7 +157,7 @@ __wrap__() {
         esac
     fi
 
-    if $HAVE_WGET && ! wget $WGET_OPTIONS --output-document="$TEMP_FILE" "$DOWNLOAD_URL"; then
+    if $HAVE_WGET && ! wget "$WGET_OPTIONS" --output-document="$TEMP_FILE" "$DOWNLOAD_URL"; then
         echo "error: '$(mask_credentials "$DOWNLOAD_URL")' is not available" >&2
         exit 1
     fi

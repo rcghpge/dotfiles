@@ -99,6 +99,7 @@ export ENABLE_MOJO_STACK_TRACE_ON_ERROR=1
 export GDK_SCALE=2
 export _JAVA_OPTIONS="-Dsun.java2d.uiScale=2"
 export PATH="$HOME/.local/share/zig:$PATH"
+export PIXI_NO_TELEMETRY=1
 
 # Conda init
 __conda_setup="$('/home/rc/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
